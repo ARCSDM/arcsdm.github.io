@@ -13,7 +13,7 @@
     color: white;
     text-align: center;
     padding: 40px 20px;
-    min-height: 1000vh;
+    min-height: 100vh;
   }
 
   img {
@@ -38,22 +38,29 @@ a img {
   }
 
   .link {
-    display: block;
-    background: white;
-    color: black;
-    padding: 15px;
-    margin: 12px auto;
-    width: 260px;
-    border-radius: 14px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: 0.25s;
-  }
 
-  .link:hover {
-    transform: scale(1.06);
-    background: #f1f1f1;
-  }
+  display: block;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  padding: 15px;
+  margin: 12px auto;
+  width: 260px;
+  border-radius: 14px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.25s;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.link:hover {
+  transform: scale(1.06);
+  background: rgba(255, 255, 255, 0.25);
+
+}
 </style>
 </head>
 
