@@ -12,12 +12,16 @@
     background: linear-gradient(to top, #0f2027, #203a43, #2c5364);
     color: white;
     text-align: center;
-    padding: 60px 20px 35px;
+    padding: 70px 0 40px;
     min-height: 100vh;
 
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: center; /* center horizontally */
+  }
+
+  /* ✅ Fixed-width container */
+  .container {
+    width: 300px;     /* same size on mobile + desktop */
   }
 
   img {
@@ -26,24 +30,22 @@
     margin-bottom: 15px;
   }
 
-  /* Top Logo */
-  a:first-of-type img {
-    opacity: 0;
-    animation: fadeUp 0.7s ease forwards;
+  a img {
+    display: block;
+    margin: 0 auto 15px;
   }
 
-  /* Bottom Logo */
   a:last-of-type img {
-    width: 135px;
+    width: 137.5px;
     margin-top: 30px;
+
     opacity: 0;
     animation: fadeUp 0.7s ease forwards;
-    animation-delay: 1s;
+    animation-delay: 0.9s;
   }
 
   h1 {
-    margin-bottom: 10px;
-    font-size: 26px;
+    margin-bottom: 12px;
 
     opacity: 0;
     animation: fadeUp 0.7s ease forwards;
@@ -51,12 +53,12 @@
   }
 
   p {
-    opacity: 0.8;
-    margin-bottom: 16px;
+    opacity: 0.7;
+    margin-bottom: 12px;
 
     opacity: 0;
     animation: fadeUp 0.7s ease forwards;
-    animation-delay: 0.25s;
+    animation-delay: 0.2s;
   }
 
   .links {
@@ -70,79 +72,3 @@
     background: rgba(255, 255, 255, 0.15);
     color: white;
     padding: 15px;
-    margin: 14px auto;
-    width: 260px;
-    border-radius: 14px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: all 0.25s ease;
-
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-
-    border: 1px solid rgba(255, 255, 255, 0.2);
-
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-
-    opacity: 0;
-    animation: fadeUp 0.7s ease forwards;
-  }
-
-  .links .link:nth-child(1) { animation-delay: 0.4s; }
-  .links .link:nth-child(2) { animation-delay: 0.6s; }
-  .links .link:nth-child(3) { animation-delay: 0.8s; }
-
-  .link:hover {
-    transform: scale(1.06);
-    background: rgba(255, 255, 255, 0.28);
-    box-shadow: 0 10px 24px rgba(0,0,0,0.3);
-  }
-
-  @keyframes fadeUp {
-    from {
-      opacity: 0;
-      transform: translateY(18px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Mobile tweak */
-  @media (max-width: 400px) {
-    .link {
-      width: 90%;
-    }
-  }
-
-</style>
-</head>
-
-<body>
-
-<a href="https://www.unionstationla.com/" target="_blank" rel="noopener noreferrer">
-  <img src="LAUSLogo.png" alt="Union Station Logo">
-</a>
-
-<h1>ASSET PORTAL</h1>
-<p>Asset Links Below</p>
-
-<div class="links" role="navigation">
-  <a class="link" href="https://my.matterport.com/show/?m=aURcSJvpYMU&play=0&ss=2055&sr=-.65%2C-1.33&tag=YFAjOmXhkU6&pin-pos=-36.43%2C1.38%2C69.85" target="_blank" rel="noopener noreferrer">
-    Matterport
-  </a>
-  <a class="link" href="https://skand.io" target="_blank" rel="noopener noreferrer">
-    Skand
-  </a>
-  <a class="link" href="https://qblogin.corrigo.com/Login/Login.aspx?secure=1&c=1" target="_blank" rel="noopener noreferrer">
-    Corrigo
-  </a>
-</div>
-
-<a href="https://arc-corporate.com/" target="_blank" rel="noopener noreferrer">
-  <img src="ARC_Profile.png" alt="ARC Logo">
-</a>
-
-</body>
-</html>
