@@ -12,16 +12,13 @@
     background: linear-gradient(to top, #0f2027, #203a43, #2c5364);
     color: white;
     text-align: center;
-    padding: 70px 0 40px;
+    padding: 70px 20px 40px;
     min-height: 100vh;
 
     display: flex;
-    justify-content: center; /* center horizontally */
-  }
-
-  /* ✅ Fixed-width container */
-  .container {
-    width: 300px;     /* same size on mobile + desktop */
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
   }
 
   img {
@@ -72,3 +69,68 @@
     background: rgba(255, 255, 255, 0.15);
     color: white;
     padding: 15px;
+    margin: 16px auto;
+    width: 260px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.25s;
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+  }
+
+  .links .link:nth-child(1) { animation-delay: 0.3s; }
+  .links .link:nth-child(2) { animation-delay: 0.5s; }
+  .links .link:nth-child(3) { animation-delay: 0.7s; }
+
+  .link:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  a:first-of-type img {
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+  }
+
+</style>
+</head>
+
+<body>
+
+<a href="https://www.unionstationla.com/" target="_blank">
+  <img src="LAUSLogo.png" alt="Union Station Logo">
+</a>
+
+<h1>ASSET PORTAL</h1>
+<p>Asset Links Below</p>
+
+<div class="links">
+  <a class="link" href="https://my.matterport.com/show/?m=aURcSJvpYMU&play=0&ss=2055&sr=-.65%2C-1.33&tag=YFAjOmXhkU6&pin-pos=-36.43%2C1.38%2C69.85" target="_blank">Matterport</a>
+  <a class="link" href="https://skand.io" target="_blank">Skand</a>
+  <a class="link" href="https://qblogin.corrigo.com/Login/Login.aspx?secure=1&c=1" target="_blank">Corrigo</a>
+</div>
+
+<a href="https://arc-corporate.com/" target="_blank">
+  <img src="ARC_Profile.png" alt="ARC Logo">
+</a>
+
+</body>
+</html>
