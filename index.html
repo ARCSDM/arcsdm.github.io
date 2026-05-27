@@ -14,7 +14,7 @@
     text-align: center;
     padding: 65px 20px 40px;
     min-height: 100vh;
-    
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -37,15 +37,15 @@
     margin-top: 35px;
 
     opacity: 0;
-    animation: fadeUp 0.6s ease forwards;
-    animation-delay: 0.6s;
+    animation: fadeUp 0.7s ease forwards;
+    animation-delay: 0.9s;
   }
 
   h1 {
     margin-bottom: 12px;
 
     opacity: 0;
-    animation: fadeUp 0.6s ease forwards;
+    animation: fadeUp 0.7s ease forwards;
     animation-delay: 0.1s;
   }
 
@@ -54,8 +54,15 @@
     margin-bottom: 12px;
 
     opacity: 0;
-    animation: fadeUp 0.6s ease forwards;
+    animation: fadeUp 0.7s ease forwards;
     animation-delay: 0.2s;
+  }
+
+  /* Container for links (fixes animation order) */
+  .links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .link {
@@ -76,19 +83,19 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
 
     opacity: 0;
-    animation: fadeUp 0.6s ease forwards;
+    animation: fadeUp 0.7s ease forwards;
   }
 
-  .link:nth-of-type(4) { animation-delay: 0.3s; }
-  .link:nth-of-type(5) { animation-delay: 0.5s; }
-  .link:nth-of-type(5) { animation-delay: 0.7s; }
+  /* Correct stagger (now reliable ✅) */
+  .links .link:nth-child(1) { animation-delay: 0.3s; }
+  .links .link:nth-child(2) { animation-delay: 0.5s; }
+  .links .link:nth-child(3) { animation-delay: 0.7s; }
 
   .link:hover {
     transform: scale(1.05);
     background: rgba(255, 255, 255, 0.25);
   }
 
-  /* Animation */
   @keyframes fadeUp {
     from {
       opacity: 0;
@@ -117,11 +124,11 @@
 <h1>ASSET PORTAL</h1>
 <p>Asset Links Below</p>
 
-<a class="link" href="https://my.matterport.com/show/?m=aURcSJvpYMU&play=0&ss=2055&sr=-.65%2C-1.33&tag=YFAjOmXhkU6&pin-pos=-36.43%2C1.38%2C69.85" target="_blank">Matterport</a>
-
-<a class="link" href="https://skand.io" target="_blank">Skand</a>
-
-<a class="link" href="https://qblogin.corrigo.com/Login/Login.aspx?secure=1&c=1" target="_blank">Corrigo</a>
+<div class="links">
+  <a class="link" href="https://my.matterport.com/show/?m=aURcSJvpYMU&play=0&ss=2055&sr=-.65%2C-1.33&tag=YFAjOmXhkU6&pin-pos=-36.43%2C1.38%2C69.85" target="_blank">Matterport</a>
+  <a class="link" href="https://skand.io" target="_blank">Skand</a>
+  <a class="link" href="https://qblogin.corrigo.com/Login/Login.aspx?secure=1&c=1" target="_blank">Corrigo</a>
+</div>
 
 <a href="https://arc-corporate.com/" target="_blank">
   <img src="ARC_Profile.png" alt="ARC Logo">
