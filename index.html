@@ -226,6 +226,31 @@ svg a {
 svg a:focus {
   outline: none;
 }
+
+/* initial hidden state */
+.modal {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+/* when active */
+.modal.show {
+  display: flex;
+  opacity: 1;
+}
+
+/* modal animation */
+.modal-content {
+  transform: scale(0.92);
+  opacity: 0;
+
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.modal.show .modal-content {
+  transform: scale(1);
+  opacity: 1;
+}
   
 </style>
 </head>
@@ -315,12 +340,25 @@ svg a:focus {
 </div>
 
 <script>
+
 function openModal() {
-  document.getElementById("imageModal").style.display = "flex";
+  const modal = document.getElementById("imageModal");
+  modal.style.display = "flex";
+
+  // allow DOM to render before adding class
+  requestAnimationFrame(() => {
+    modal.classList.add("show");
+  });
 }
 
 function closeModal() {
-  document.getElementById("imageModal").style.display = "none";
+  const modal = document.getElementById("imageModal");
+
+  modal.classList.remove("show");
+
+  setTimeout(() => {
+    modal.style.display = "none";
+  }, 250); // match CSS duration
 }
 
 /* click outside to close */
