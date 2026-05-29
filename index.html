@@ -6,30 +6,33 @@
 <title>ARC SDM</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: Helvetica, Arial, sans-serif;
-  background: linear-gradient(to top, #0f2027, #203a43, #2c5364);
-  color: white;
-  text-align: center;
-  padding: 70px 20px 40px;
-  min-height: 100vh;
+  body {
+    margin: 0;
+    font-family: Helvetica, Arial, sans-serif;
+    background: linear-gradient(to top, #0f2027, #203a43, #2c5364);
+    color: white;
+    text-align: center;
+    padding: 70px 20px 40px;
+    min-height: 100vh;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* MODAL */
-.modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
+    .modal {
   display: none;
   position: fixed;
   inset: 0;
   z-index: 999;
+
   background: rgba(0,0,0,0.6);
+
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(6px);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .modal-content {
@@ -39,93 +42,180 @@ body {
   border-radius: 16px;
   padding: 20px;
   position: relative;
+  text-align: center;
 }
 
 .modal-image {
   width: 100%;
   border-radius: 10px;
+  margin-bottom: 15px;
 }
 
-/* LINKS */
-.links {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  cursor: pointer;
 }
 
-.link {
-  display: block;
-  background: rgba(255,255,255,0.15);
-  color: white;
-  padding: 15px;
-  margin: 16px auto;
-  width: 260px;
-  border-radius: 14px;
+.open-btn {
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  padding: 12px 20px;
+  border-radius: 10px;
   text-decoration: none;
-  font-weight: bold;
+  color: white;
+  font-weight: bold
+  }
 
-  transition: 0.25s;
-}
+  img {
+    width: 110px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+  }
 
-.link:hover {
-  transform: scale(1.05);
-  background: rgba(255,255,255,0.25);
-}
+  a img {
+    display: block;
+    margin: 0 auto 15px;
+  }
 
-/* IMAGE WRAPPER */
+  a:last-of-type img {
+    width: 137.5px;
+    margin-top: 30px;
+
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+    animation-delay: 0.9s;
+
+    box-shadow: none;
+  }
+
+  h1 {
+    margin-bottom: 12px;
+
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+    animation-delay: 0.1s;
+  }
+
+  p {
+    opacity: 0.7;
+    margin-bottom: 12px;
+
+    font-size: 17px;
+
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+    animation-delay: 0.2s;
+  }
+
+ 
+  .links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .link {
+    display: block;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    padding: 15px;
+    margin: 16px auto;
+    width: 260px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: bold;
+    
+    font-size: 17px;
+    
+    transition: 0.25s;
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+  }
+
+
+  .links .link:nth-child(1) { animation-delay: 0.3s; }
+  .links .link:nth-child(2) { animation-delay: 0.5s; }
+  .links .link:nth-child(3) { animation-delay: 0.7s; }
+
+  .link:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  a:first-of-type img {
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+  }
+  
 .image-wrapper {
   position: relative;
   width: 100%;
 }
 
-/* BLUR OVERLAY */
-.blur-overlay {
-  position: absolute;
-  inset: 0;
-  backdrop-filter: blur(6px);
-  pointer-events: none;
-  opacity: 0;
-  transition: 0.3s;
-}
-
-.image-wrapper.active .blur-overlay {
-  opacity: 1;
-}
-
-/* SVG */
+/* SVG overlay */
 .overlay {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
 }
 
+/* building shapes */
+.building {
+  fill: rgba(255,255,255,0);  /* invisible */
+  stroke: transparent;
+  transition: 0.25s;
+  cursor: pointer;
+}
+
+/* hover glow */
 .building {
   fill: transparent;
   stroke: transparent;
   cursor: pointer;
-  transition: 0.25s;
+  transition: all 0.25s ease;
 }
 
-.building:hover {
-  fill: rgba(255,255,255,0.15);
-  stroke: rgba(255,255,255,0.7);
-  stroke-width: 2;
-
-  filter: drop-shadow(0 0 8px rgba(255,255,255,0.8));
+svg a {
+  outline: none;
 }
 
-/* REMOVE BLUE OUTLINE */
-svg a { outline: none; }
-svg a:focus { outline: none; }
-
+svg a:focus {
+  outline: none;
+}
+  
 </style>
 </head>
 
 <body>
 
 <a href="https://www.unionstationla.com/" target="_blank">
-  <img src="LAUSLogo.png" width="110">
+  <img src="LAUSLogo.png" alt="Union Station Logo">
 </a>
 
 <h1>ASSET PORTAL</h1>
@@ -138,34 +228,72 @@ svg a:focus { outline: none; }
 </div>
 
 <a href="https://arc-corporate.com/" target="_blank">
-  <img src="ARC_Profile.png" width="140">
+  <img src="ARC_Profile.png" alt="ARC Logo">
 </a>
+  
+<div id="imageModal" class="modal">  
+  <div class="modal-content">        
 
-<!-- MODAL -->
-<div id="imageModal" class="modal">
-  <div class="modal-content">
+<div class="image-wrapper">
+  <img src="Instruction.png" class="modal-image">
 
-    <div class="image-wrapper">
-      <img src="Instruction.png" class="modal-image">
-      
-      <div class="blur-overlay"></div>
+  <svg viewBox="0 0 1662 811" class="overlay">
 
-      <svg viewBox="0 0 1662 811" class="overlay">
+    <!-- Ticketing Concourse -->
+    <a href="https://example.com/south">
+      <polygon points="445,550 1110,550 1110,700 445,700" class="building"/>
+      <title>Ticketing Concourse</title>
+    </a>
 
-        <a href="#"><polygon points="445,550 1110,550 1110,700 445,700" class="building"/></a>
-        <a href="#"><polygon points="275,560 445,560 445,655 275,655" class="building"/></a>
-        <a href="#"><polygon points="95,685 275,685 275,725 95,725" class="building"/></a>
-        <a href="#"><polygon points="720,170 915,170 915,550 720,550" class="building"/></a>
-        <a href="#"><polygon points="915,170 1085,170 1085,300 915,300" class="building"/></a>
-        <a href="#"><polygon points="1020,300 1110,300 1110,550 1020,550" class="building"/></a>
-        <a href="#"><polygon points="1110,550 1320,550 1320,690 1110,690" class="building"/></a>
-        <a href="#"><polygon points="1320,690 1600,690 1600,730 1320,730" class="building"/></a>
-        <a href="#"><polygon points="1040,500 1090,500 1090,550 1040,550" class="building"/></a>
+    <!-- North Offices -->
+    <a href="https://example.com/west">
+      <polygon points="275,560 445,560 445,655 275,655" class="building"/>
+      <title>North Offices</title>
+    </a>
 
-      </svg>
-    </div>
+    <!-- North Breezeway -->
+    <a href="https://example.com/southwest">
+      <polygon points="95,685 275,685 275,725 95,725" class="building"/>
+      <title>North Breezeway</title>
+    </a>
 
-  </div>
+    <!-- Waiting Room -->
+    <a href="https://example.com/courtyard">
+      <polygon points="720,170 915,170 915,550 720,550" class="building"/>
+      <title>Waiting Room</title>
+    </a>
+
+    <!-- Passenger Concourse -->
+    <a href="https://example.com/north">
+      <polygon points="915,170 1085,170 1085,300 915,300" class="building"/>
+      <title>Passenger Concourse</title>
+    </a>
+
+    <!-- Exit Arcade -->
+    <a href="https://example.com/east">
+      <polygon points="1020,300 1110,300 1110,550 1020,550" class="building"/>
+      <title>Exit Arcade</title>
+    </a>
+
+    <!-- Fred Harvey -->
+    <a href="https://example.com/east-connector">
+      <polygon points="1110,550 1320,550 1320,690 1110,690" class="building"/>
+      <title>Fred Harvey</title>
+    </a>
+
+    <!-- South Breezeway -->
+    <a href="https://example.com/southeast">
+      <polygon points="1320,690 1600,690 1600,730 1320,730" class="building"/>
+      <title>South Breezeway</title>
+    </a>
+
+    <!-- Small pavilion -->
+    <a href="https://example.com/pavilion">
+      <polygon points="1040,500 1090,500 1090,550 1040,550" class="building"/>
+      <title>Pavilion</title>
+    </a>
+
+  </svg>
 </div>
 
 <script>
@@ -177,29 +305,21 @@ function closeModal() {
   document.getElementById("imageModal").style.display = "none";
 }
 
-/* CLOSE INTERACTIONS */
+/* click outside to close */
 window.onclick = function(e) {
   const modal = document.getElementById("imageModal");
-  if (e.target === modal) closeModal();
-};
+  if (e.target === modal) {
+    closeModal();
+  }
+}
 
+/* press ESC to close */
 document.addEventListener("keydown", function(e) {
-  if (e.key === "Escape") closeModal();
+  if (e.key === "Escape") {
+    closeModal();
+  }
 });
-
-/* BLUR EFFECT */
-const wrapper = document.querySelector(".image-wrapper");
-
-document.querySelectorAll(".building").forEach(shape => {
-  shape.addEventListener("mouseenter", () => {
-    wrapper.classList.add("active");
-  });
-
-  shape.addEventListener("mouseleave", () => {
-    wrapper.classList.remove("active");
-  });
-});
-</script>
-
+</script> 
+  
 </body>
-</html>
+</html> can you take me through a step by step of where to change this?
