@@ -194,11 +194,15 @@
 }
 
 /* hover glow */
-.building {
-  fill: transparent;
-  stroke: transparent;
-  cursor: pointer;
-  transition: all 0.25s ease;
+.building:hover {
+  transform: scale(1.01);
+  fill: rgba(255, 255, 255, 0.08);
+  stroke: rgba(255, 255, 255, 0.6);
+  stroke-width: 2;
+
+  filter:
+    drop-shadow(0 0 6px rgba(255,255,255,0.5))
+    drop-shadow(0 0 15px rgba(255,255,255,0.25));
 }
 
 svg a {
@@ -322,4 +326,4 @@ document.addEventListener("keydown", function(e) {
 </script> 
   
 </body>
-</html> can you take me through a step by step of where to change this?
+</html>
