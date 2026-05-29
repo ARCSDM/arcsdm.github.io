@@ -19,6 +19,54 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+
+    .modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+
+  background: rgba(0,0,0,0.6);
+
+  justify-content: center;
+  align-items: center;
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 700px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+  text-align: center;
+}
+
+.modal-image {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.open-btn {
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  padding: 12px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: white;
+  font-weight: bold}
   }
 
   img {
@@ -148,7 +196,7 @@
 <div id="imageModal" class="modal">  
   <div class="modal-content">        
     <span class="close" onclick="closeModal()">&times;</span>    
-    <img src="instruction.png" class="modal-image">    
+    <img src="Instruction.png" class="modal-image">    
     <a href="https://my.matterport.com/show/?m=aURcSJvpYMU" target="_blank" class="open-btn">      
       Continue to Matterport    
     </a>  
