@@ -176,58 +176,28 @@
   width: 100%;
 }
 
-.hotspot {
+/* SVG overlay */
+.overlay {
   position: absolute;
-  display: block;
-  border-radius: 10px;
-  cursor: pointer;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* building shapes */
+.building {
+  fill: rgba(255,255,255,0);  /* invisible */
+  stroke: transparent;
   transition: 0.25s;
+  cursor: pointer;
 }
 
-/* TEMP DEBUG — helps you see boxes */
-.hotspot {
-  outline: 2px solid red;
-}
-
-/* Hover glow */
-.hotspot:hover {
-  background: rgba(255,255,255,0.2);
-  box-shadow: 0 0 20px rgba(255,255,255,0.6);
-  transform: scale(1.03);
-}
-
-/* Label */
-.hotspot span {
-  position: absolute;
-  bottom: 110%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0,0,0,0.7);
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-size: 14px;
-  white-space: nowrap;
-  opacity: 0;
-  transition: 0.2s;
-}
-
-.hotspot:hover span {
-  opacity: 1;
-}
-
-/* POSITION OF BUILDINGS */
-.hotspot.a {
-  top: 20%;
-  left: 10%;
-  width: 25%;
-  height: 25%;
-}
-
-.hotspot.b {
-  top: 20%;
-  left: 50%;
-  width: 25%;
-  height: 25%;
+/* hover glow */
+.building:hover {
+  fill: rgba(0, 200, 255, 0.25);
+  stroke: rgba(0, 200, 255, 0.8);
+  stroke-width: 2;
 }
 </style>
 </head>
@@ -255,24 +225,66 @@
   <div class="modal-content">        
   <span class="close" onclick="closeModal()">&times;</span>    
 
-  <div class="image-wrapper">
-    <img src="Instruction.png" class="modal-image">
+<div class="image-wrapper">
+  <img src="Instruction.png" class="modal-image">
 
-    <a href="https://example.com/a" class="hotspot a">
-      <span>Building A</span>
+  <svg viewBox="0 0 1662 811" class="overlay">
+
+    <!-- Main south building -->
+    <a href="https://example.com/south">
+      <polygon points="445,550 1110,550 1110,700 445,700" class="building"/>
+      <title>Main South Building</title>
     </a>
 
-    <a href="https://example.com/b" class="hotspot b">
-      <span>Building B</span>
+    <!-- West wing -->
+    <a href="https://example.com/west">
+      <polygon points="275,560 445,560 445,655 275,655" class="building"/>
+      <title>West Wing</title>
     </a>
 
-  </div>
+    <!-- Southwest connector -->
+    <a href="https://example.com/southwest">
+      <polygon points="95,685 275,685 275,725 95,725" class="building"/>
+      <title>Southwest Connector</title>
+    </a>
 
-  <a href="https://my.matterport.com/show/?m=aURcSJvpYMU" target="_blank" class="open-btn">
-    Continue to Matterport
-  </a>  
+    <!-- Northwest courtyard building -->
+    <a href="https://example.com/courtyard">
+      <polygon points="720,170 915,170 915,550 720,550" class="building"/>
+      <title>Courtyard Building</title>
+    </a>
 
-</div>
+    <!-- North wing -->
+    <a href="https://example.com/north">
+      <polygon points="915,170 1085,170 1085,300 915,300" class="building"/>
+      <title>North Wing</title>
+    </a>
+
+    <!-- East wing -->
+    <a href="https://example.com/east">
+      <polygon points="1020,300 1110,300 1110,550 1020,550" class="building"/>
+      <title>East Wing</title>
+    </a>
+
+    <!-- East connector -->
+    <a href="https://example.com/east-connector">
+      <polygon points="1110,550 1320,550 1320,690 1110,690" class="building"/>
+      <title>East Connector</title>
+    </a>
+
+    <!-- Southeast wing -->
+    <a href="https://example.com/southeast">
+      <polygon points="1320,690 1600,690 1600,730 1320,730" class="building"/>
+      <title>Southeast Wing</title>
+    </a>
+
+    <!-- Small pavilion -->
+    <a href="https://example.com/pavilion">
+      <polygon points="1040,500 1090,500 1090,550 1040,550" class="building"/>
+      <title>Pavilion</title>
+    </a>
+
+  </svg>
 </div>
 
 <script>
