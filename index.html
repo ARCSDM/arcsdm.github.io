@@ -171,7 +171,8 @@
     animation: fadeUp 0.7s ease forwards;
   }
   
-.image-wrapper {
+image-wrapper.active .blur-overlay {  
+  opacity: 1;
   position: relative;
   width: 100%;
 }
@@ -195,14 +196,14 @@
 
 /* hover glow */
 .building:hover {
-  transform: scale(1.01);
-  fill: rgba(255, 255, 255, 0.08);
-  stroke: rgba(255, 255, 255, 0.6);
+  fill: rgba(255,255,255,0.15);
+  stroke: rgba(255,255,255,0.7);
   stroke-width: 2;
 
   filter:
-    drop-shadow(0 0 6px rgba(255,255,255,0.5))
-    drop-shadow(0 0 15px rgba(255,255,255,0.25));
+    drop-shadow(0 0 8px rgba(255,255,255,0.8));
+
+  pointer-events: auto;
 }
 
 svg a {
@@ -230,6 +231,18 @@ svg a:focus {
   box-shadow:
     0 0 10px rgba(255,255,255,0.6),
     0 0 30px rgba(255,255,255,0.3);
+}
+  
+.blur-overlay {
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  pointer-events: none;
+
+  opacity: 0;
+  transition: 0.3s;
 }
 
 </style>
@@ -260,7 +273,7 @@ svg a:focus {
 <div class="image-wrapper">
   <img src="Instruction.png" class="modal-image">
   
-  <div id="lens"></div>
+  <div class="blur-overlay"></div>
   
   <svg viewBox="0 0 1662 811" class="overlay">
 
@@ -344,11 +357,19 @@ document.addEventListener("keydown", function(e) {
 const lens = document.getElementById("lens");
 const img = document.querySelector(".modal-image");
 
+const wrapper = document.querySelector(".image-wrapper");
+
 document.querySelectorAll(".building").forEach(shape => {
+
   shape.addEventListener("mouseenter", () => {
-    lens.style.display = "block";
-    lens.style.backgroundImage = `url(${img.src})`;
+    wrapper.classList.add("active");
   });
+
+  shape.addEventListener("mouseleave", () => {
+    wrapper.classList.remove("active");
+  });
+
+});
 
   shape.addEventListener("mouseleave", () => {
     lens.style.display = "none";
