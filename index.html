@@ -187,18 +187,29 @@
 
 /* building shapes */
 .building {
-  fill: rgba(255,255,255,0);  /* invisible */
+  fill: transparent;
   stroke: transparent;
-  transition: 0.25s;
   cursor: pointer;
+  transition: all 0.25s ease;
 }
 
 /* hover glow */
 .building:hover {
-  fill: rgba(0, 200, 255, 0.25);
-  stroke: rgba(0, 200, 255, 0.8);
-  stroke-width: 2;
+  fill: rgba(255, 255, 255, 0.12);   /* soft glass look */
+  stroke: rgba(255, 255, 255, 0.4);  /* subtle edge */
+  stroke-width: 1.5;
+
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.4));
 }
+
+  svg a {
+  outline: none;
+}
+
+svg a:focus {
+  outline: none;
+}
+
 </style>
 </head>
 
@@ -230,52 +241,52 @@
 
   <svg viewBox="0 0 1662 811" class="overlay">
 
-    <!-- Main south building -->
+    <!-- Ticketing Concourse -->
     <a href="https://example.com/south">
       <polygon points="445,550 1110,550 1110,700 445,700" class="building"/>
-      <title>Main South Building</title>
+      <title>Ticketing Concourse</title>
     </a>
 
-    <!-- West wing -->
+    <!-- North Offices -->
     <a href="https://example.com/west">
       <polygon points="275,560 445,560 445,655 275,655" class="building"/>
-      <title>West Wing</title>
+      <title>North Offices</title>
     </a>
 
-    <!-- Southwest connector -->
+    <!-- North Breezeway -->
     <a href="https://example.com/southwest">
       <polygon points="95,685 275,685 275,725 95,725" class="building"/>
-      <title>Southwest Connector</title>
+      <title>North Breezeway</title>
     </a>
 
-    <!-- Northwest courtyard building -->
+    <!-- Waiting Room -->
     <a href="https://example.com/courtyard">
       <polygon points="720,170 915,170 915,550 720,550" class="building"/>
-      <title>Courtyard Building</title>
+      <title>Waiting Room</title>
     </a>
 
-    <!-- North wing -->
+    <!-- Passenger Concourse -->
     <a href="https://example.com/north">
       <polygon points="915,170 1085,170 1085,300 915,300" class="building"/>
-      <title>North Wing</title>
+      <title>Passenger Concourse</title>
     </a>
 
-    <!-- East wing -->
+    <!-- Exit Arcade -->
     <a href="https://example.com/east">
       <polygon points="1020,300 1110,300 1110,550 1020,550" class="building"/>
-      <title>East Wing</title>
+      <title>Exit Arcade</title>
     </a>
 
-    <!-- East connector -->
+    <!-- Fred Harvey -->
     <a href="https://example.com/east-connector">
       <polygon points="1110,550 1320,550 1320,690 1110,690" class="building"/>
-      <title>East Connector</title>
+      <title>Fred Harvey</title>
     </a>
 
-    <!-- Southeast wing -->
+    <!-- South Breezeway -->
     <a href="https://example.com/southeast">
       <polygon points="1320,690 1600,690 1600,730 1320,730" class="building"/>
-      <title>Southeast Wing</title>
+      <title>South Breezeway</title>
     </a>
 
     <!-- Small pavilion -->
