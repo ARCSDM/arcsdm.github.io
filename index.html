@@ -36,12 +36,10 @@
 }
 
 .modal-content {
-  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  width: auto;
   max-width: 95%;
   max-height: 90vh;
 
@@ -50,16 +48,20 @@
 
   padding: 12px;
   box-sizing: border-box;
+
+  margin: auto;
 }
 
+
 .modal-image {
+  display: block;
+
   max-width: 100%;
   max-height: 85vh;
 
-  height: auto;
   width: auto;
+  height: auto;
 
-  display: block;
   border-radius: 10px;
 }
 
@@ -185,9 +187,7 @@
   
 .image-wrapper {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-block;
 }
 
 /* SVG overlay */
