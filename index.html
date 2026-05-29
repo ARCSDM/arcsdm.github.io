@@ -195,13 +195,18 @@
 
 /* hover glow */
 .building:hover {
-  fill: rgba(255,255,255,0.08);
-  stroke: rgba(255,255,255,0.6);
+  .building:hover {
+  transform: scale(1.01);
+  fill: rgba(255, 255, 255, 0.08);
+  stroke: rgba(255, 255, 255, 0.6);
   stroke-width: 2;
 
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+
   filter:
-    drop-shadow(0 0 8px rgba(255,255,255,0.6))
-    drop-shadow(0 0 20px rgba(255,255,255,0.25));
+    drop-shadow(0 0 6px rgba(255,255,255,0.5))
+    drop-shadow(0 0 15px rgba(255,255,255,0.25));
 }
 
   svg a {
@@ -235,8 +240,7 @@ svg a:focus {
 </a>
   
 <div id="imageModal" class="modal">  
-  <div class="modal-content">        
-  <span class="close" onclick="closeModal()">&times;</span>    
+  <div class="modal-content">         
 
 <div class="image-wrapper">
   <img src="Instruction.png" class="modal-image">
@@ -308,7 +312,22 @@ function openModal() {
 function closeModal() {
   document.getElementById("imageModal").style.display = "none";
 }
-</script>  
+
+/* click outside to close */
+window.onclick = function(e) {
+  const modal = document.getElementById("imageModal");
+  if (e.target === modal) {
+    closeModal();
+  }
+}
+
+/* press ESC to close */
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Escape") {
+    closeModal();
+  }
+});
+</script>
   
 </body>
 </html>
