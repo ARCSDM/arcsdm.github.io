@@ -136,7 +136,7 @@
 <p>Asset Links Below</p>
 
 <div class="links">
-  <a class="link" href="https://my.matterport.com/show/?m=aURcSJvpYMU&play=0&ss=2055&sr=-.65%2C-1.33&tag=YFAjOmXhkU6&pin-pos=-36.43%2C1.38%2C69.85" target="_blank">Matterport</a>
+  <a class="link" href="#" onclick="openModal()">Matterport</a>
   <a class="link" href="https://skand.io" target="_blank">Skand</a>
   <a class="link" href="https://qblogin.corrigo.com/Login/Login.aspx?secure=1&c=1" target="_blank">Corrigo</a>
 </div>
@@ -144,6 +144,27 @@
 <a href="https://arc-corporate.com/" target="_blank">
   <img src="ARC_Profile.png" alt="ARC Logo">
 </a>
+  
+<div id="imageModal" class="modal">  
+  <div class="modal-content">        
+    <span class="close" onclick="closeModal()">&times;</span>    
+    <img src="instruction.png" class="modal-image">    
+    <a href="https://my.matterport.com/show/?m=aURcSJvpYMU" target="_blank" class="open-btn">      
+      Continue to Matterport    
+    </a>  
+  
+  </div>
+</div>
 
+<script>
+function openModal() {
+  document.getElementById("imageModal").style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("imageModal").style.display = "none";
+}
+</script>  
+  
 </body>
 </html>
