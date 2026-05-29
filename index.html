@@ -213,6 +213,25 @@ svg a:focus {
   outline: none;
 }
 
+#lens {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  pointer-events: none;
+
+  display: none;
+
+  border: 2px solid rgba(255,255,255,0.7);
+
+  background-repeat: no-repeat;
+  background-size: 200%;
+
+  box-shadow:
+    0 0 10px rgba(255,255,255,0.6),
+    0 0 30px rgba(255,255,255,0.3);
+}
+
 </style>
 </head>
 
@@ -240,7 +259,9 @@ svg a:focus {
 
 <div class="image-wrapper">
   <img src="Instruction.png" class="modal-image">
-
+  
+  <div id="lens"></div>
+  
   <svg viewBox="0 0 1662 811" class="overlay">
 
     <!-- Ticketing Concourse -->
@@ -309,19 +330,48 @@ function closeModal() {
   document.getElementById("imageModal").style.display = "none";
 }
 
-/* click outside to close */
+/* close interactions */
 window.onclick = function(e) {
   const modal = document.getElementById("imageModal");
-  if (e.target === modal) {
-    closeModal();
-  }
-}
+  if (e.target === modal) closeModal();
+};
 
-/* press ESC to close */
 document.addEventListener("keydown", function(e) {
-  if (e.key === "Escape") {
-    closeModal();
-  }
+  if (e.key === "Escape") closeModal();
+});
+
+/* LENS LOGIC */
+const lens = document.getElementById("lens");
+const img = document.querySelector(".modal-image");
+
+document.querySelectorAll(".building").forEach(shape => {
+  shape.addEventListener("mouseenter", () => {
+    lens.style.display = "block";
+    lens.style.backgroundImage = `url(${img.src})`;
+  });
+
+  shape.addEventListener("mouseleave", () => {
+    lens.style.display = "none";
+  });
+
+  shape.addEventListener("mousemove", (e) => {
+    const rect = img.getBoundingClientRect();
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    lens.style.left = (x - lens.offsetWidth / 2) + "px";
+    lens.style.top = (y - lens.offsetHeight / 2) + "px";
+
+    const zoom = 2;
+
+    lens.style.backgroundSize =
+      rect.width * zoom + "px " + rect.height * zoom + "px";
+
+    lens.style.backgroundPosition =
+      -(x * zoom - lens.offsetWidth / 2) + "px " +
+      -(y * zoom - lens.offsetHeight / 2) + "px";
+  });
 });
 </script>
   
