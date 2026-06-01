@@ -345,7 +345,7 @@ svg a:focus {
 <div class="links">
   <a class="link matterport-link" href="#" onclick="openModal()">Matterport</a>
   <a class="link skand-link" href="#" target="_blank">Skand</a>
-  <a class="link corrigo-link" href="#" target="_blank">Corrigo</a>
+  <a class="link corrigo-link" href="#" onclick="openCorrigo
 </div>
 
 
@@ -445,39 +445,6 @@ svg a:focus {
 </div>
     
 <script>
-// ❌ If asset not found → show your modal
-  if (!data) {
-    openCorrigoModal();
-    return;
-  }
-
-  // ✅ Update page title
-  document.querySelector("h1").innerText = data.name;
-
-  // ✅ Update buttons dynamically
-
-const matterportLink = document.querySelector(".matterport-link");
-const skandLink = document.querySelector(".skand-link");
-const corrigoLink = document.querySelector(".corrigo-link");
-
-  if (data.matterport) {
-  matterportLink.href = data.matterport;
-} else {
-  matterportLink.style.visibility = "hidden";
-}
-
-if (data.skand) {
-  skandLink.href = data.skand;
-} else {
-  skandLink.style.visibility = "hidden";
-}
-
-if (data.corrigo) {
-  corrigoLink.href = data.corrigo;
-} else {
-  corrigoLink.style.visibility = "hidden";
-}
-}
     
 function openModal() {
   const modal = document.getElementById("imageModal");
