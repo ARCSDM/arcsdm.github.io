@@ -450,7 +450,8 @@ svg a:focus {
     
 <a class="button"
    href="https://qblogin.corrigo.com/Login/Login.aspx?secure=1&c=1" 
-   target="_blank">
+   target="_blank"
+   tabindex="-1">
   Request Asset
 </a>
 
@@ -479,12 +480,16 @@ function closeModal() {
   }, 250); // match CSS duration
 }
 
+
 function openCorrigoModal() {
   const modal = document.getElementById("corrigoModal");
   modal.style.display = "flex";
 
   requestAnimationFrame(() => {
     modal.classList.add("show");
+
+    // ✅ REMOVE focus from anything
+    document.activeElement.blur();
   });
 }
 
