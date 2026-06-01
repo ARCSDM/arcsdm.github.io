@@ -125,7 +125,7 @@
     box-shadow: none;
   }
 
-  h1 {
+.page-content h1 {
     margin-bottom: 12px;
 
     opacity: 0;
@@ -133,54 +133,50 @@
     animation-delay: 0.1s;
   }
 
-  p {
-    opacity: 0.7;
+.page-content p {
+    opacity: 0;
     margin-bottom: 12px;
-
     font-size: 17px;
 
-    opacity: 0.7;
-  margin-bottom: 12px;
-  font-size: 17px;
+  animation: fadeUp 0.7s ease forwards;
+  animation-delay: 0.2s;
   }
 
  
-  .links {
+ .page-content .links {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
-  .link {
-    display: block;
-    background: rgba(255, 255, 255, 0.15);
-    color: white;
-    padding: 15px;
-    margin: 16px auto;
-    width: 260px;
-    border-radius: 14px;
-    text-decoration: none;
-    font-weight: bold;
-    
-    font-size: 17px;
-    
-    transition: 0.25s;
+.page-content .link {
+  display: block;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  padding: 15px;
+  margin: 16px auto;
+  width: 260px;
+  border-radius: 14px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 17px;
 
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+  transition: 0.25s;
 
-    border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-
-    opacity: 0;
-    animation: fadeUp 0.7s ease forwards;
-  }
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards;
+}
 
 
-  .links .link:nth-child(1) { animation-delay: 0.3s; }
-  .links .link:nth-child(2) { animation-delay: 0.5s; }
-  .links .link:nth-child(3) { animation-delay: 0.7s; }
+.page-content .links .link:nth-child(1) { animation-delay: 0.3s; }
+.page-content .links .link:nth-child(2) { animation-delay: 0.5s; }
+.page-content .links .link:nth-child(3) { animation-delay: 0.7s; }
 
   .link:hover {
     transform: scale(1.05);
@@ -339,6 +335,8 @@ svg a:focus {
   <img src="LAUSLogo.png" alt="Union Station Logo">
 </a>
 
+<div class="page-content">
+  
 <h1>ASSET PORTAL</h1>
 <p>Asset Links Below</p>
 
@@ -348,6 +346,8 @@ svg a:focus {
   <a class="link" href="#" onclick="openCorrigoModal()">Corrigo</a>
 </div>
 
+</div>
+  
 <a href="https://arc-corporate.com/" target="_blank">
   <img src="ARC_Profile.png" alt="ARC Logo">
 </a>
