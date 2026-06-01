@@ -343,10 +343,11 @@ svg a:focus {
 <p>Asset Links Below</p>
 
 <div class="links">
-  <a class="link matterport-link" href="#">Matterport</a>
-  <a class="link skand-link" href="#">Skand</a>
-  <a class="link corrigo-link" href="#">Corrigo</a>
+  <a <a class="link matterport-link" href="#" onclick="openModal()">Matterport</a>
+  <a class="link skand-link" href="#" target="_blank">Skand</a>
+  <a class="link corrigo-link" href="#" target="_blank">Corrigo</a>
 </div>
+
 
 </div>
   
@@ -450,6 +451,8 @@ const assetId = params.get("asset");
 
 if (assetId) {
   loadAsset(assetId);
+} else {
+  document.querySelector(".links").style.display = "none";
 }
   
 function loadAsset(id) {
@@ -488,21 +491,21 @@ const corrigoLink = document.querySelector(".corrigo-link");
   if (data.matterport) {
   matterportLink.href = data.matterport;
 } else {
-  matterportLink.style.display = "none";
+  matterportLink.style.visibility = "hidden";
 }
 
 if (data.skand) {
   skandLink.href = data.skand;
 } else {
-  skandLink.style.display = "none";
+  skandLink.style.visibility = "hidden";
 }
 
 if (data.corrigo) {
   corrigoLink.href = data.corrigo;
 } else {
-  corrigoLink.style.display = "none";
+  corrigoLink.style.visibility = "hidden";
 }
-
+}
     
 function openModal() {
   const modal = document.getElementById("imageModal");
