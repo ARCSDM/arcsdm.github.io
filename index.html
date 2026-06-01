@@ -345,7 +345,8 @@ svg a:focus {
   </svg>
 </div>
 </div>
-    
+
+  
 <div id="corrigoModal" class="modal">
   <div class="modal-content" style="flex-direction: column; text-align: center; max-width: 420px;">
     
@@ -424,12 +425,15 @@ document.getElementById("corrigoModal").addEventListener("click", function(e) {
 
   
 /* click outside to close */
-const modal = document.getElementById("imageModal");
-
-modal.addEventListener("click", function(e) {
-  if (e.target === modal) {
-    closeModal();
-  }
+document.querySelectorAll(".modal").forEach(modal => {
+  modal.addEventListener("click", function(e) {
+    if (e.target === modal) {
+      modal.classList.remove("show");
+      setTimeout(() => {
+        modal.style.display = "none";
+      }, 250);
+    }
+  });
 });
 
 /* press ESC to close */
