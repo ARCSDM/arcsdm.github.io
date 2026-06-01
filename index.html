@@ -64,7 +64,7 @@
 
 @media (max-width: 600px) {
   .modal-content {
-    width: 85%;
+    width: 90%;
     max-width: 340px;
 
     padding: 18px;
@@ -317,6 +317,13 @@ svg a:focus {
 .modal.show p {
   opacity: 1 !important;
 }
+
+
+.modal-content .link {
+  width: auto;
+  display: inline-block;
+  margin: 10px auto 0;
+}
   
 </style>
 </head>
@@ -411,9 +418,9 @@ svg a:focus {
   <div class="modal-content" style="flex-direction: column; text-align: center; max-width: 420px;">
     
 
-    <h2 style="opacity: 0; animation: fadeUp 0.5s forwards 0.1s;">No Asset Information</h2>
+    <h2>No Asset Information</h2>
 
-    <p style="opacity: 0; animation: fadeUp 0.5s forwards 0.2s;">
+    <p
       No asset information exists on this platform.<br>
       Click below to request this asset be added to Corrigo.
     </p>
