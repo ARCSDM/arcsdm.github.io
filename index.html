@@ -343,9 +343,9 @@ svg a:focus {
 <p>Asset Links Below</p>
 
 <div class="links">
-  <a class="link" href="#" onclick="openModal()">Matterport</a>
-  <a class="link" href="https://skand.io" target="_blank">Skand</a>
-  <a class="link" href="#" onclick="openCorrigoModal()">Corrigo</a>
+  <a class="link matterport-link" href="#">Matterport</a>
+  <a class="link skand-link" href="#">Skand</a>
+  <a class="link corrigo-link" href="#">Corrigo</a>
 </div>
 
 </div>
@@ -445,6 +445,65 @@ svg a:focus {
     
 <script>
 
+const params = new URLSearchParams(window.location.search);
+const assetId = params.get("asset");
+
+if (assetId) {
+  loadAsset(assetId);
+}
+  
+function loadAsset(id) {
+
+  // ⚠️ TEMP mock data (replace with real API later)
+  const assets = {
+    "PUMP-001": {
+      name: "Pump 001",
+      matterport: "https://example.com",
+      skand: "https://skand.io",
+      corrigo: "https://qblogin.corrigo.com"
+    },
+    "AHU-312": {
+      name: "Air Handler 312",
+      matterport: "https://example.com"
+    }
+  };
+
+  const data = assets[id];
+
+  // ❌ If asset not found → show your modal
+  if (!data) {
+    openCorrigoModal();
+    return;
+  }
+
+  // ✅ Update page title
+  document.querySelector("h1").innerText = data.name;
+
+  // ✅ Update buttons dynamically
+
+const matterportLink = document.querySelector(".matterport-link");
+const skandLink = document.querySelector(".skand-link");
+const corrigoLink = document.querySelector(".corrigo-link");
+
+  if (data.matterport) {
+  matterportLink.href = data.matterport;
+} else {
+  matterportLink.style.display = "none";
+}
+
+if (data.skand) {
+  skandLink.href = data.skand;
+} else {
+  skandLink.style.display = "none";
+}
+
+if (data.corrigo) {
+  corrigoLink.href = data.corrigo;
+} else {
+  corrigoLink.style.display = "none";
+}
+
+    
 function openModal() {
   const modal = document.getElementById("imageModal");
   modal.style.display = "flex";
