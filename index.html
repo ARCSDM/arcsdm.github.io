@@ -273,7 +273,7 @@ svg a:focus {
 <div class="links">
   <a class="link" href="#" onclick="openModal()">Matterport</a>
   <a class="link" href="https://skand.io" target="_blank">Skand</a>
-  <a class="link" href="https://qblogin.corrigo.com/Login/Login.aspx?secure=1&c=1" target="_blank">Corrigo</a>
+  <a class="link" href="#" onclick="openCorrigoModal()">Corrigo</a>
 </div>
 
 <a href="https://arc-corporate.com/" target="_blank">
@@ -345,6 +345,34 @@ svg a:focus {
   </svg>
 </div>
 
+<div id="corrigoModal" class="modal">
+  <div class="modal-content" style="flex-direction: column; text-align: center; max-width: 420px;">
+    
+    <span class="close" onclick="closeCorrigoModal()">&times;</span>
+
+    <h2 style="margin-bottom: 10px;">No Asset Information</h2>
+
+    <p style="opacity: 0.8; margin-bottom: 20px;">
+      No asset information exists on this platform.<br>
+      Click below to request this asset be added to Corrigo.
+    </p>
+
+    <a href="https://qblogin.corrigo.com/Login/Login.aspx?secure=1&c=1" 
+       target="_blank"
+       style="
+         background: rgba(255,255,255,0.2);
+         padding: 12px 20px;
+         border-radius: 10px;
+         text-decoration: none;
+         color: white;
+         font-weight: bold;
+       ">
+       Request Asset
+    </a>
+
+  </div>
+</div>
+    
 <script>
 
 function openModal() {
@@ -367,6 +395,33 @@ function closeModal() {
   }, 250); // match CSS duration
 }
 
+function openCorrigoModal() {
+  const modal = document.getElementById("corrigoModal");
+  modal.style.display = "flex";
+
+  requestAnimationFrame(() => {
+    modal.classList.add("show");
+  });
+}
+
+function closeCorrigoModal() {
+  const modal = document.getElementById("corrigoModal");
+
+  modal.classList.remove("show");
+
+  setTimeout(() => {
+    modal.style.display = "none";
+  }, 250);
+}
+
+/* click outside to close Corrigo modal */
+document.getElementById("corrigoModal").addEventListener("click", function(e) {
+  if (e.target === this) {
+    closeCorrigoModal();
+  }
+});
+
+  
 /* click outside to close */
 const modal = document.getElementById("imageModal");
 
@@ -382,6 +437,7 @@ document.addEventListener("keydown", function(e) {
     closeModal();
   }
 });
+  
 </script> 
   
 </body>
