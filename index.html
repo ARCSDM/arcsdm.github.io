@@ -268,7 +268,33 @@ svg a:focus {
   margin-bottom: 22px;
   line-height: 1.5;
 }
-  
+
+.button {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 14px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 17px;
+
+  transition: 0.25s;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.button:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+}
+
 </style>
 </head>
 
@@ -370,18 +396,13 @@ svg a:focus {
       Click below to request this asset be added to Corrigo.
     </p>
 
-    <a href="https://qblogin.corrigo.com/Login/Login.aspx?secure=1&c=1" 
-       target="_blank"
-       style="
-         background: rgba(255,255,255,0.2);
-         padding: 12px 20px;
-         border-radius: 10px;
-         text-decoration: none;
-         color: white;
-         font-weight: bold;
-       ">
-       Request
-    </a>
+    
+<a class="link" 
+   href="https://qblogin.corrigo.com/Login/Login.aspx?secure=1&c=1" 
+   target="_blank"
+   style="width: auto; margin: 0;">
+  Request
+</a>
 
   </div>
 </div>
