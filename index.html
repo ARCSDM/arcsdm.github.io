@@ -324,6 +324,17 @@ svg a:focus {
   display: inline-block;
   margin: 10px auto 0;
 }
+
+.modal-content > * {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.modal.show .modal-content > * {
+  opacity: 1;
+  transform: translateY(0);
+}
   
 </style>
 </head>
