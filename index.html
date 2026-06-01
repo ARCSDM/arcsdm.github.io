@@ -38,17 +38,19 @@
 .modal-content {
   position: relative;
   display: inline-flex;
+  flex-direction: column
   align-items: center;
   justify-content: center;
 
-  max-width: 95%;
+  width: auto;
+  max-width: 90%;
   max-height: 90vh;
 
   background: rgba(255,255,255,0.08);
   border-radius: 16px;
   
 
-  padding: 12px;
+  padding: 18px;
   box-sizing: border-box;
 
   margin: auto;
@@ -59,6 +61,16 @@
 
   border: 1px solid rgba(255,255,255,0.1);
   }
+
+@media (max-width: 600px) {
+  .modal-content {
+    width: 85%;
+    max-width: 340px;
+
+    padding: 18px;
+    border-radius: 14px;
+  }
+}
 
 .modal-image {
   display: block;
@@ -295,10 +307,16 @@ svg a:focus {
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
 }
 
-.link:focus {
+.link:focus,
+.link:active {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(255,255,255,0.4);
-}  
+  box-shadow: none;
+} 
+
+.modal.show h2,
+.modal.show p {
+  opacity: 1 !important;
+}
   
 </style>
 </head>
@@ -392,7 +410,6 @@ svg a:focus {
 <div id="corrigoModal" class="modal">
   <div class="modal-content" style="flex-direction: column; text-align: center; max-width: 420px;">
     
-    <span class="close" onclick="closeCorrigoModal()">&times;</span>
 
     <h2 style="opacity: 0; animation: fadeUp 0.5s forwards 0.1s;">No Asset Information</h2>
 
