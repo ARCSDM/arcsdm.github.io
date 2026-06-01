@@ -296,6 +296,9 @@ svg a:focus {
 
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .button:hover {
@@ -303,12 +306,6 @@ svg a:focus {
   background: rgba(255, 255, 255, 0.25);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
 }
-
-.link:focus,
-.link:active {
-  outline: none;
-  box-shadow: none;
-} 
 
 .modal-content .link {
   width: auto;
@@ -325,6 +322,25 @@ svg a:focus {
   opacity: 1;
   transform: translateY(0);
   transition: opacity 0.3s ease, transform 0.3s ease;
+}
+  
+.button:focus,
+.button:active,
+.button:focus-visible,
+.link:focus,
+.link:active,
+.link:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.button {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
 }
   
 </style>
