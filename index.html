@@ -341,9 +341,9 @@ svg a:focus {
 <p>Asset Links Below</p>
 
 <div class="links">
-  <a class="link matterport-link" href="#" onclick="openModal(); return false;">Matterport</a>
-  <a class="link skand-link" href="https://app.skand.io/explore?project=68ffb07f517dec004d2c2697&annotation=6a1dfa3812059d004d6dcd8e&shareLinkToken=2ab2f425-adbb-4947-93ae-a6f102a30772" target="_blank">Skand</a>
-  <a class="link corrigo-link" href="#" onclick="openCorrigoModal(); return false;">Corrigo</a>
+  <a class="link matterport-link" id="matterportBtn" href="#">Matterport</a>
+  <a class="link skand-link" id="corrigoBtn" href="#">skand</a>
+  <a class="link corrigo-link" id="corrigoBtn" href="#">Corrigo</a>
 </div>
 
 </div>
@@ -419,6 +419,46 @@ function closeCorrigoModal() {
   document.activeElement.blur();
 }
 
+function setupButtons() {
+  const matterportBtn = document.getElementById("matterportBtn");
+
+  matterportBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    if (!currentAsset) {
+      openModal();
+      return;
+    }
+
+    const link = currentAsset.Matterport;
+
+    if (link && link !== "a") {
+      window.open(link, "_blank");
+    } else {
+      openModal();
+    }
+  });
+
+  const corrigoBtn = document.getElementById("corrigoBtn");
+
+corrigoBtn.addEventListener("click", function (e) {
+  e.preventDefault();
+
+  if (!currentAsset) {
+    openCorrigoModal();
+    return;
+  }
+
+  const link = currentAsset.Corrigo;
+
+  if (link && link !== "a") {
+    window.open(link, "_blank");
+  } else {
+    openCorrigoModal();
+  }
+});
+}
+
 
 document.getElementById("corrigoModal").addEventListener("click", function(e) {
   if (e.target === this) {
@@ -445,7 +485,27 @@ document.addEventListener("keydown", function(e) {
     document.activeElement.blur();
   }
 });
-  
+
+let assetData = [];
+let currentAsset = null;
+
+fetch("assets.json")
+  .then(res => res.json())
+  .then(data => {
+  assetData = data;
+
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  currentAsset = assetData.find(a => a["Generated Asset ID"] === id);
+
+  if (!currentAsset) {
+    console.warn("No asset found for ID:", id);
+  }
+
+  setupButtons();
+});
+
 </script> 
   
 </body>
