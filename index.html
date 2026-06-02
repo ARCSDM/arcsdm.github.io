@@ -44,7 +44,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   text-align: center;
 
   min-height: 220px;
@@ -63,6 +63,12 @@
 
   border: 1px solid rgba(255,255,255,0.1);
   }
+  
+.modal-content::before,
+.modal-content::after {
+  content: "";
+  flex: 1;
+}
 
 @media (max-width: 600px) {
   .modal-content {
@@ -121,8 +127,8 @@
     margin-top: 30px;
 
     opacity: 0;
-    animation: fadeUp 0.7s ease forwards;
-    animation-delay: 0.9s;
+    animation: fadeUp 0.5s ease forwards;
+    animation-delay: 0.7s;
 
     box-shadow: none;
   }
