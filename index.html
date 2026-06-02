@@ -428,6 +428,11 @@ function setupButtons() {
     matterportBtn.addEventListener("click", function (e) {
       e.preventDefault();
 
+      if (!currentAsset) {
+        openModal();
+        return;
+      }
+
       const link = currentAsset?.Matterport;
 
       if (link && link !== "a") {
@@ -442,6 +447,11 @@ function setupButtons() {
     corrigoBtn.addEventListener("click", function (e) {
       e.preventDefault();
 
+      if (!currentAsset) {
+        openCorrigoModal();
+        return;
+      }
+
       const link = currentAsset?.Corrigo;
 
       if (link && link !== "a") {
@@ -455,6 +465,8 @@ function setupButtons() {
   if (skandBtn) {
     skandBtn.addEventListener("click", function (e) {
       e.preventDefault();
+
+      if (!currentAsset) return;
 
       const link = currentAsset?.Skand;
 
@@ -514,6 +526,7 @@ fetch("assets.json")
 
     setupButtons();
   });
+  
 </script> 
   
 </body>
