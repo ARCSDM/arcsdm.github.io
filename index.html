@@ -12,7 +12,7 @@
     background: linear-gradient(to top, #0f2027, #203a43, #2c5364);
     color: white;
     text-align: center;
-    padding: 70px 20px 40px;
+    padding: 70px 20px 30px;
     min-height: 100vh;
 
     display: flex;
@@ -327,23 +327,19 @@ svg a:focus {
 
 .asset-id-text {
   margin-top: 14px;
-
   font-family: Helvetica, Arial, sans-serif;
   font-size: 17px;
   font-weight: 600;
   letter-spacing: 1px;
 
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.08); /* semi-transparent */
   padding: 6px 12px;
   border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.08);
-  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);  /* this creates the glass effect */
+  -webkit-backdrop-filter: blur(6px);
 
-  padding: 0;
-  background: none;
-  border: none;
-
-  text-shadow: 0 2px 10px rgba(0,0,0,0.35); /* slight glow highlight */
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35); /* subtle glow */
 
   user-select: none;
 }
