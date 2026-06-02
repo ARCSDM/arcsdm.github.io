@@ -402,10 +402,10 @@ function openModal() {
   });
 }
 
-
 function closeModal() {
   const modal = document.getElementById("imageModal");
   modal.classList.remove("show");
+  document.activeElement.blur();
 }
 
 function openCorrigoModal() {
@@ -413,18 +413,16 @@ function openCorrigoModal() {
 
   requestAnimationFrame(() => {
     modal.classList.add("show");
-
-    document.activeElement.blur();
   });
 }
 
 function closeCorrigoModal() {
   const modal = document.getElementById("corrigoModal");
   modal.classList.remove("show");
+  document.activeElement.blur();
 }
 
 
-/* click outside to close Corrigo modal */
 document.getElementById("corrigoModal").addEventListener("click", function(e) {
   if (e.target === this) {
     closeCorrigoModal();
@@ -436,7 +434,8 @@ document.getElementById("corrigoModal").addEventListener("click", function(e) {
 document.querySelectorAll(".modal").forEach(modal => {
   modal.addEventListener("click", function(e) {
     if (e.target === modal) {
-      modal.classList.remove("show");
+      closeModal();
+      closeCorrigoModal();
     }
   });
 });
@@ -446,6 +445,7 @@ document.addEventListener("keydown", function(e) {
   if (e.key === "Escape") {
     closeModal();
     closeCorrigoModal();
+    document.activeElement.blur();
   }
 });
   
