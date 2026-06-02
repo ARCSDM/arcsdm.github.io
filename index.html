@@ -44,7 +44,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   text-align: center;
 
   min-height: 220px;
@@ -64,11 +64,14 @@
   border: 1px solid rgba(255,255,255,0.1);
   }
   
-.modal-content::before,
-.modal-content::after {
-  content: "";
-  flex: 1;
+
+.modal-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
+
 
 @media (max-width: 600px) {
   .modal-content {
@@ -354,9 +357,23 @@ svg a:focus {
   <img src="ARC_Profile.png" alt="ARC Logo">
 </a>
   
-<div id="imageModal" class="modal">
-  <div class="modal-content" style="flex-direction: column; text-align: center; max-width: 420px;">
+<div class="modal-content">
+  <div class="modal-inner">
+    <h2>Select Desired Link</h2>
 
+    <a class="button"
+       href="https://my.matterport.com/show/?m=qwcoKpTrRVJ&play=0&ss=114&sr=-3.09%2C-.45&tag=JtCMdLO13Z8&pin-pos=-3.67%2C.49%2C27.5"
+       target="_blank">
+      Location of Asset
+    </a>
+    
+    <a class="button"
+       href="https://my.matterport.com/show/?m=qwcoKpTrRVJ&play=0&ss=151&sr=-.57%2C-1.55&tag=UuwsxyY1Gct&pin-pos=-41.37%2C1.56%2C18.46"
+       target="_blank">
+      South Patio Tour
+    </a>
+  </div>
+</div>
     <h2>Select Desired Link</h2>
 
     <a class="button"
@@ -374,9 +391,9 @@ svg a:focus {
   </div>
 </div>
   
-<div id="corrigoModal" class="modal">
-  <div class="modal-content" style="flex-direction: column; text-align: center; max-width: 420px;">
-    
+
+<div class="modal-content">
+  <div class="modal-inner">
 
     <h2>No Asset Information</h2>
 
