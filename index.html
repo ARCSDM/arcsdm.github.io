@@ -437,9 +437,6 @@ document.querySelectorAll(".modal").forEach(modal => {
   modal.addEventListener("click", function(e) {
     if (e.target === modal) {
       modal.classList.remove("show");
-      setTimeout(() => {
-        modal.style.display = "none";
-      }, 250);
     }
   });
 });
