@@ -232,16 +232,23 @@ svg a:focus {
 /* initial hidden state */
 .modal {
   opacity: 0;
-  transition: opacity 0.25s ease;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity 0.25s ease,
+    visibility 0s linear 0.25s;
 }
 
-/* when active */
 .modal.show {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-}
 
+  transition:
+    opacity 0.25s ease,
+    visibility 0s linear 0s;
+}
 
 /* modal animation */
 .modal-content {
@@ -413,11 +420,7 @@ function closeModal() {
 }
 
 function openCorrigoModal() {
-  const modal = document.getElementById("corrigoModal");
-
-  requestAnimationFrame(() => {
-    modal.classList.add("show");
-  });
+  document.getElementById("corrigoModal").classList.add("show");
 }
 
 function closeCorrigoModal() {
