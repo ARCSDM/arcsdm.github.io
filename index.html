@@ -546,15 +546,21 @@ fetch("assets.json")
     console.log("ID from QR:", decodedId);
 
     currentAsset = assetData.find(a =>
-      (a["Generated Asset ID"] || "").trim() === decodedId
-    );
+  String(a["Generated Asset ID"] || "").trim() === String(decodedId).trim()
+);
 
     console.log("Matched asset:", currentAsset);
 
     const label = document.getElementById("assetIdLabel");
 
 if (label) {
-  label.textContent = currentAsset?.["Generated Asset ID"] || "No Asset ID";
+  if (currentAsset) {
+    label.textContent = currentAsset["Generated Asset ID"];
+    label.style.opacity = "1";
+  } else {
+    label.textContent = "INVALID ASSET";
+    label.style.color = "rgba(255,100,100,0.8)";
+  }
 }
 
     setupButtons();
