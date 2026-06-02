@@ -20,11 +20,12 @@
     align-items: center;
     justify-content: flex-start;
   }
-    .modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 999;
+    
+.modal {
+  display: flex;
+  opacity: 0;
+  pointer-events: none;
+}
 
   background: rgba(0,0,0,0.6);
 
@@ -37,10 +38,11 @@
 
 .modal-content {
   position: relative;
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center
 
   width: auto;
   max-width: 90%;
@@ -48,12 +50,9 @@
 
   background: rgba(255,255,255,0.08);
   border-radius: 16px;
-  
 
   padding: 18px;
   box-sizing: border-box;
-
-  margin: auto;
   
   box-shadow:    
     0 25px 60px rgba(0,0,0,0.6),  
@@ -218,9 +217,10 @@ svg a:focus {
 
 /* when active */
 .modal.show {
-  display: flex;
   opacity: 1;
+  pointer-events: auto;
 }
+
 
 /* modal animation */
 .modal-content {
@@ -391,7 +391,6 @@ svg a:focus {
     
 function openModal() {
   const modal = document.getElementById("imageModal");
-  modal.style.display = "flex";
 
   // allow DOM to render before adding class
   requestAnimationFrame(() => {
@@ -412,7 +411,6 @@ function closeModal() {
 
 function openCorrigoModal() {
   const modal = document.getElementById("corrigoModal");
-  modal.style.display = "flex";
 
   requestAnimationFrame(() => {
     modal.classList.add("show");
