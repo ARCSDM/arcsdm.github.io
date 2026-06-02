@@ -283,9 +283,20 @@ svg a:focus {
 }
 
 .modal-content .link {
-  width: auto;
-  display: inline-block;
+  width: 100%;
+  max-width: 320px;
+  display: block;
   margin: 10px 0;
+
+  transform: none !important;
+}
+
+.modal-content .link:hover {
+  transform: none !important;
+}
+
+.modal-content .link:active {
+  transform: none !important;
 }
   
 .button:focus,
