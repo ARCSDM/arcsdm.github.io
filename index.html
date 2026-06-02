@@ -342,7 +342,7 @@ svg a:focus {
 
 <div class="links">
   <a class="link matterport-link" id="matterportBtn" href="#">Matterport</a>
-  <a class="link skand-link" id="corrigoBtn" href="#">skand</a>
+  <a class="link skand-link" id="skandBtn" href="#">Skand</a>
   <a class="link corrigo-link" id="corrigoBtn" href="#">Corrigo</a>
 </div>
 
@@ -421,44 +421,49 @@ function closeCorrigoModal() {
 
 function setupButtons() {
   const matterportBtn = document.getElementById("matterportBtn");
-
-  matterportBtn.addEventListener("click", function (e) {
-    e.preventDefault();
-
-    if (!currentAsset) {
-      openModal();
-      return;
-    }
-
-    const link = currentAsset.Matterport;
-
-    if (link && link !== "a") {
-      window.open(link, "_blank");
-    } else {
-      openModal();
-    }
-  });
-
   const corrigoBtn = document.getElementById("corrigoBtn");
+  const skandBtn = document.getElementById("skandBtn");
 
-corrigoBtn.addEventListener("click", function (e) {
-  e.preventDefault();
+  if (matterportBtn) {
+    matterportBtn.addEventListener("click", function (e) {
+      e.preventDefault();
 
-  if (!currentAsset) {
-    openCorrigoModal();
-    return;
+      const link = currentAsset?.Matterport;
+
+      if (link && link !== "a") {
+        window.open(link, "_blank");
+      } else {
+        openModal();
+      }
+    });
   }
 
-  const link = currentAsset.Corrigo;
+  if (corrigoBtn) {
+    corrigoBtn.addEventListener("click", function (e) {
+      e.preventDefault();
 
-  if (link && link !== "a") {
-    window.open(link, "_blank");
-  } else {
-    openCorrigoModal();
+      const link = currentAsset?.Corrigo;
+
+      if (link && link !== "a") {
+        window.open(link, "_blank");
+      } else {
+        openCorrigoModal();
+      }
+    });
   }
-});
+
+  if (skandBtn) {
+    skandBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const link = currentAsset?.Skand;
+
+      if (link && link !== "a") {
+        window.open(link, "_blank");
+      }
+    });
+  }
 }
-
 
 document.getElementById("corrigoModal").addEventListener("click", function(e) {
   if (e.target === this) {
@@ -492,20 +497,23 @@ let currentAsset = null;
 fetch("assets.json")
   .then(res => res.json())
   .then(data => {
-  assetData = data;
+    assetData = data;
 
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
 
-  currentAsset = assetData.find(a => a["Generated Asset ID"] === id);
+    const decodedId = decodeURIComponent(id || "").trim();
 
-  if (!currentAsset) {
-    console.warn("No asset found for ID:", id);
-  }
+    console.log("ID from QR:", decodedId);
 
-  setupButtons();
-});
+    currentAsset = assetData.find(a =>
+      (a["Generated Asset ID"] || "").trim() === decodedId
+    );
 
+    console.log("Matched asset:", currentAsset);
+
+    setupButtons();
+  });
 </script> 
   
 </body>
