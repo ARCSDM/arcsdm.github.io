@@ -325,6 +325,30 @@ svg a:focus {
   transform: none;
 }  
 
+.asset-id-label {
+  margin-top: 14px;
+  font-size: 14px;
+  font-family: Helvetica, Arial, sans-serif;
+  letter-spacing: 1px;
+
+  color: rgba(255, 255, 255, 0.65);
+
+  padding: 8px 14px;
+  border-radius: 10px;
+
+  display: inline-block;
+
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+
+  user-select: none;
+}
+
 </style>
 </head>
 
@@ -343,6 +367,10 @@ svg a:focus {
   <a class="link matterport-link" id="matterportBtn" href="#">Matterport</a>
   <a class="link skand-link" id="skandBtn" href="#">Skand</a>
   <a class="link corrigo-link" id="corrigoBtn" href="#">Corrigo</a>
+</div>
+
+  <div id="assetIdLabel" class="asset-id-label">
+  —
 </div>
 
 </div>
@@ -522,6 +550,12 @@ fetch("assets.json")
     );
 
     console.log("Matched asset:", currentAsset);
+
+    const label = document.getElementById("assetIdLabel");
+
+if (label) {
+  label.textContent = currentAsset?.["Generated Asset ID"] || "No Asset ID";
+}
 
     setupButtons();
   });
