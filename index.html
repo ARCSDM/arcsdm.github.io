@@ -336,6 +336,11 @@ svg a:focus {
 
   opacity: 0;
   transform: translateY(10px);
+  transition: none;
+}
+
+.asset-id-text.show {
+  animation: fadeUp 0.7s ease forwards;
 }
 
 </style>
@@ -545,9 +550,10 @@ fetch("assets.json")
 if (label) {
   if (currentAsset) {
   label.textContent = currentAsset["Generated Asset ID"];
-
+  
+  // Trigger the animation by adding the class
   requestAnimationFrame(() => {
-    label.style.animation = "fadeUp 0.7s ease forwards";
+    label.classList.add("show");
   });
 }
 
