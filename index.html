@@ -194,7 +194,7 @@
   user-select: none;
 }  
   
-.page-content .link .link {
+.page-content .link {
   opacity: 0;
   animation: fadeUp 0.7s ease forwards;
 }
@@ -327,21 +327,21 @@ svg a:focus {
 
 .asset-id-text {
   margin-top: 10px;
+
   font-family: Helvetica, Arial, sans-serif;
   font-size: 15px;
   font-weight: 600;
   letter-spacing: 1px;
+
   color: #ff4d4d;
+
   user-select: none;
 
   opacity: 0;
   transform: translateY(10px);
-}
 
-.asset-id-text.show {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  animation: fadeUp 0.7s ease forwards;
+  animation-delay: 0.2125s; /* adjust timing here */
 }
 
 </style>
@@ -358,8 +358,8 @@ svg a:focus {
 <h1>ASSET PORTAL</h1>
 <p>Asset Links Below</p>
 
-<div id="assetIdLabel" class="asset-id-text"></div>
-
+<div id="assetIdLabel" class="asset-id-text">
+  —
 </div>
 
 <div class="links">
@@ -418,13 +418,16 @@ svg a:focus {
 </div>
     
 <script>
-/* ---------------- Modals ---------------- */
+    
 function openModal() {
-  document.getElementById("imageModal").classList.add("show");
+  const modal = document.getElementById("imageModal");
+
+modal.classList.add("show");
 }
 
 function closeModal() {
-  document.getElementById("imageModal").classList.remove("show");
+  const modal = document.getElementById("imageModal");
+  modal.classList.remove("show");
   document.activeElement.blur();
 }
 
@@ -433,49 +436,77 @@ function openCorrigoModal() {
 }
 
 function closeCorrigoModal() {
-  document.getElementById("corrigoModal").classList.remove("show");
+  const modal = document.getElementById("corrigoModal");
+  modal.classList.remove("show");
   document.activeElement.blur();
 }
 
-/* ---------------- Button Setup ---------------- */
 function setupButtons() {
   const matterportBtn = document.getElementById("matterportBtn");
   const corrigoBtn = document.getElementById("corrigoBtn");
   const skandBtn = document.getElementById("skandBtn");
 
   if (matterportBtn) {
-    matterportBtn.addEventListener("click", function(e) {
+    matterportBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      if (!currentAsset || !currentAsset.Matterport || currentAsset.Matterport === "a") {
+
+      if (!currentAsset) {
         openModal();
+        return;
+      }
+
+      const link = currentAsset?.Matterport;
+
+      if (link && link !== "a") {
+        window.open(link, "_blank");
       } else {
-        window.open(currentAsset.Matterport, "_blank");
+        openModal();
       }
     });
   }
 
   if (corrigoBtn) {
-    corrigoBtn.addEventListener("click", function(e) {
+    corrigoBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      if (!currentAsset || !currentAsset.Corrigo || currentAsset.Corrigo === "a") {
+
+      if (!currentAsset) {
         openCorrigoModal();
+        return;
+      }
+
+      const link = currentAsset?.Corrigo;
+
+      if (link && link !== "a") {
+        window.open(link, "_blank");
       } else {
-        window.open(currentAsset.Corrigo, "_blank");
+        openCorrigoModal();
       }
     });
   }
 
   if (skandBtn) {
-    skandBtn.addEventListener("click", function(e) {
+    skandBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      if (currentAsset && currentAsset.Skand && currentAsset.Skand !== "a") {
-        window.open(currentAsset.Skand, "_blank");
+
+      if (!currentAsset) return;
+
+      const link = currentAsset?.Skand;
+
+      if (link && link !== "a") {
+        window.open(link, "_blank");
       }
     });
   }
 }
 
-/* ---------------- Close modals on click outside ---------------- */
+document.getElementById("corrigoModal").addEventListener("click", function(e) {
+  if (e.target === this) {
+    closeCorrigoModal();
+  }
+});
+
+  
+/* click outside to close */
 document.querySelectorAll(".modal").forEach(modal => {
   modal.addEventListener("click", function(e) {
     if (e.target === modal) {
@@ -485,7 +516,7 @@ document.querySelectorAll(".modal").forEach(modal => {
   });
 });
 
-/* ---------------- Close modals on ESC ---------------- */
+/* press ESC to close */
 document.addEventListener("keydown", function(e) {
   if (e.key === "Escape") {
     closeModal();
@@ -494,7 +525,6 @@ document.addEventListener("keydown", function(e) {
   }
 });
 
-/* ---------------- Asset Loading ---------------- */
 let assetData = [];
 let currentAsset = null;
 
@@ -505,33 +535,33 @@ fetch("assets.json")
 
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
+
     const decodedId = decodeURIComponent(id || "").trim();
+
     console.log("ID from QR:", decodedId);
 
     currentAsset = assetData.find(a =>
-      String(a["Generated Asset ID"] || "").trim() === decodedId
-    );
+  String(a["Generated Asset ID"] || "").trim() === String(decodedId).trim()
+);
+
     console.log("Matched asset:", currentAsset);
 
     const label = document.getElementById("assetIdLabel");
+
 if (label) {
   if (currentAsset) {
     label.textContent = currentAsset["Generated Asset ID"];
-    label.style.color = "#ff4d4d";
+    label.style.opacity = "1";
   } else {
     label.textContent = "INVALID ASSET";
     label.style.color = "rgba(255,100,100,0.8)";
   }
-  // trigger fade-in
-  requestAnimationFrame(() => {
-    label.classList.add("show");
-  });
 }
 
     setupButtons();
-  })
-  .catch(err => console.error("Error loading asset data:", err));
+  });
+  
 </script> 
   
 </body>
-</html>
+</html> 
