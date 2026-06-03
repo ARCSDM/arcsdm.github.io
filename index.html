@@ -417,16 +417,13 @@ svg a:focus {
 </div>
     
 <script>
-    
+/* ---------------- Modals ---------------- */
 function openModal() {
-  const modal = document.getElementById("imageModal");
-
-modal.classList.add("show");
+  document.getElementById("imageModal").classList.add("show");
 }
 
 function closeModal() {
-  const modal = document.getElementById("imageModal");
-  modal.classList.remove("show");
+  document.getElementById("imageModal").classList.remove("show");
   document.activeElement.blur();
 }
 
@@ -435,77 +432,49 @@ function openCorrigoModal() {
 }
 
 function closeCorrigoModal() {
-  const modal = document.getElementById("corrigoModal");
-  modal.classList.remove("show");
+  document.getElementById("corrigoModal").classList.remove("show");
   document.activeElement.blur();
 }
 
+/* ---------------- Button Setup ---------------- */
 function setupButtons() {
   const matterportBtn = document.getElementById("matterportBtn");
   const corrigoBtn = document.getElementById("corrigoBtn");
   const skandBtn = document.getElementById("skandBtn");
 
   if (matterportBtn) {
-    matterportBtn.addEventListener("click", function (e) {
+    matterportBtn.addEventListener("click", function(e) {
       e.preventDefault();
-
-      if (!currentAsset) {
+      if (!currentAsset || !currentAsset.Matterport || currentAsset.Matterport === "a") {
         openModal();
-        return;
-      }
-
-      const link = currentAsset?.Matterport;
-
-      if (link && link !== "a") {
-        window.open(link, "_blank");
       } else {
-        openModal();
+        window.open(currentAsset.Matterport, "_blank");
       }
     });
   }
 
   if (corrigoBtn) {
-    corrigoBtn.addEventListener("click", function (e) {
+    corrigoBtn.addEventListener("click", function(e) {
       e.preventDefault();
-
-      if (!currentAsset) {
+      if (!currentAsset || !currentAsset.Corrigo || currentAsset.Corrigo === "a") {
         openCorrigoModal();
-        return;
-      }
-
-      const link = currentAsset?.Corrigo;
-
-      if (link && link !== "a") {
-        window.open(link, "_blank");
       } else {
-        openCorrigoModal();
+        window.open(currentAsset.Corrigo, "_blank");
       }
     });
   }
 
   if (skandBtn) {
-    skandBtn.addEventListener("click", function (e) {
+    skandBtn.addEventListener("click", function(e) {
       e.preventDefault();
-
-      if (!currentAsset) return;
-
-      const link = currentAsset?.Skand;
-
-      if (link && link !== "a") {
-        window.open(link, "_blank");
+      if (currentAsset && currentAsset.Skand && currentAsset.Skand !== "a") {
+        window.open(currentAsset.Skand, "_blank");
       }
     });
   }
 }
 
-document.getElementById("corrigoModal").addEventListener("click", function(e) {
-  if (e.target === this) {
-    closeCorrigoModal();
-  }
-});
-
-  
-/* click outside to close */
+/* ---------------- Close modals on click outside ---------------- */
 document.querySelectorAll(".modal").forEach(modal => {
   modal.addEventListener("click", function(e) {
     if (e.target === modal) {
@@ -515,7 +484,7 @@ document.querySelectorAll(".modal").forEach(modal => {
   });
 });
 
-/* press ESC to close */
+/* ---------------- Close modals on ESC ---------------- */
 document.addEventListener("keydown", function(e) {
   if (e.key === "Escape") {
     closeModal();
@@ -524,6 +493,7 @@ document.addEventListener("keydown", function(e) {
   }
 });
 
+/* ---------------- Asset Loading ---------------- */
 let assetData = [];
 let currentAsset = null;
 
@@ -534,32 +504,35 @@ fetch("assets.json")
 
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
-
     const decodedId = decodeURIComponent(id || "").trim();
-
     console.log("ID from QR:", decodedId);
 
     currentAsset = assetData.find(a =>
-  String(a["Generated Asset ID"] || "").trim() === String(decodedId).trim()
-);
-
+      String(a["Generated Asset ID"] || "").trim() === decodedId
+    );
     console.log("Matched asset:", currentAsset);
 
     const label = document.getElementById("assetIdLabel");
-
-if (label) {
-  if (currentAsset) {
-  label.textContent = currentAsset["Generated Asset ID"];
-  
-  // Trigger the animation by adding the class
-  requestAnimationFrame(() => {
-    label.classList.add("show");
-  });
-}
+    if (label) {
+      if (currentAsset) {
+        label.textContent = currentAsset["Generated Asset ID"];
+        // Reset any existing animation
+        label.classList.remove("show");
+        void label.offsetWidth; // trigger reflow
+        // Add the class to start fade-in
+        label.classList.add("show");
+      } else {
+        label.textContent = "INVALID ASSET";
+        label.style.color = "rgba(255,100,100,0.8)";
+        label.classList.remove("show");
+        void label.offsetWidth;
+        label.classList.add("show");
+      }
+    }
 
     setupButtons();
-  });
-  
+  })
+  .catch(err => console.error("Error loading asset data:", err));
 </script> 
   
 </body>
