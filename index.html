@@ -395,49 +395,27 @@ svg a:focus {
 </div>
 
 <div id="corrigoModal" class="modal">  
-  <div class="modal-content">
-    <div class="modal-inner">
+<div class="modal-content">
+  <div class="modal-inner">
 
-      <h2>No Asset Information</h2>
+    <h2>No Asset Information</h2>
 
-      <p>
-        No asset information exists on this platform.<br>
-        Click below to request this asset be added to Corrigo.
-      </p>
+    <p>
+      No asset information exists on this platform.<br>
+      Click below to request this asset be added to Corrigo.
+    </p>
 
-      <a class="link"
-         href="https://qblogin.corrigo.com/Login/Login.aspx?secure=1&c=1"
-         target="_blank"
-         tabindex="-1">
-        Request Asset
-      </a>
+    
+<a class="link"
+   href="https://qblogin.corrigo.com/Login/Login.aspx?secure=1&c=1" 
+   target="_blank"
+   tabindex="-1">
+  Request Asset
+</a>
 
-    </div>
   </div>
 </div>
-
-<!-- WEB MODAL -->
-<div id="webModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeWebModal()">&times;</span>
-
-    <iframe
-      id="webModalFrame"
-      src=""
-      frameborder="0"
-      style="width:100%; height:70vh; border-radius:12px;">
-    </iframe>
-
-    <a id="openInTab"
-       href="#"
-       target="_blank"
-       class="link"
-       style="margin-top:10px;">
-      Open in New Tab
-    </a>
-  </div>
 </div>
-
     
 <script>
     
@@ -463,26 +441,6 @@ function closeCorrigoModal() {
   document.activeElement.blur();
 }
 
-// make global functions
-function openWebModal(url) {
-  const modal = document.getElementById("webModal");
-  const iframe = document.getElementById("webModalFrame");
-  const openInTab = document.getElementById("openInTab");
-
-  iframe.src = url;
-  openInTab.href = url;
-
-  modal.classList.add("show");
-}
-
-function closeWebModal() {
-  const modal = document.getElementById("webModal");
-  const iframe = document.getElementById("webModalFrame");
-
-  iframe.src = "";
-  modal.classList.remove("show");
-}
-
 function setupButtons() {
   const matterportBtn = document.getElementById("matterportBtn");
   const corrigoBtn = document.getElementById("corrigoBtn");
@@ -491,34 +449,52 @@ function setupButtons() {
   if (matterportBtn) {
     matterportBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      let url;
-      if (!currentAsset || !currentAsset.Matterport || currentAsset.Matterport === "a") {
-        url = "https://my.matterport.com/show/?m=qwcoKpTrRVJ"; // fallback
-      } else {
-        url = currentAsset.Matterport;
+
+      if (!currentAsset) {
+        openModal();
+        return;
       }
-      openWebModal(url); // open in modal
+
+      const link = currentAsset?.Matterport;
+
+      if (link && link !== "a") {
+        window.open(link, "_blank");
+      } else {
+        openModal();
+      }
     });
   }
 
   if (corrigoBtn) {
     corrigoBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      let url;
-      if (!currentAsset || !currentAsset.Corrigo || currentAsset.Corrigo === "a") {
-        url = "https://qblogin.corrigo.com/Login/Login.aspx?secure=1&c=1";
-      } else {
-        url = currentAsset.Corrigo;
+
+      if (!currentAsset) {
+        openCorrigoModal();
+        return;
       }
-      openWebModal(url);
+
+      const link = currentAsset?.Corrigo;
+
+      if (link && link !== "a") {
+        window.open(link, "_blank");
+      } else {
+        openCorrigoModal();
+      }
     });
   }
 
   if (skandBtn) {
     skandBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      if (!currentAsset || !currentAsset.Skand || currentAsset.Skand === "a") return;
-      openWebModal(currentAsset.Skand);
+
+      if (!currentAsset) return;
+
+      const link = currentAsset?.Skand;
+
+      if (link && link !== "a") {
+        window.open(link, "_blank");
+      }
     });
   }
 }
@@ -536,16 +512,15 @@ document.querySelectorAll(".modal").forEach(modal => {
     if (e.target === modal) {
       closeModal();
       closeCorrigoModal();
-      closeWebModal();
     }
   });
 });
 
+/* press ESC to close */
 document.addEventListener("keydown", function(e) {
   if (e.key === "Escape") {
     closeModal();
     closeCorrigoModal();
-    closeWebModal();
     document.activeElement.blur();
   }
 });
