@@ -199,7 +199,6 @@
   animation: fadeUp 0.7s ease forwards;
 }
 
-
 .page-content .links .link:nth-child(1) { animation-delay: 0.225s; }
 .page-content .links .link:nth-child(2) { animation-delay: 0.350s; }
 .page-content .links .link:nth-child(3) { animation-delay: 0.475s; }
@@ -327,21 +326,19 @@ svg a:focus {
 
 .asset-id-text {
   margin-top: 10px;
-
   font-family: Helvetica, Arial, sans-serif;
   font-size: 15px;
   font-weight: 600;
   letter-spacing: 1px;
-
   color: #ff4d4d;
-
   user-select: none;
 
   opacity: 0;
   transform: translateY(10px);
+}
 
+.asset-id-text.show {
   animation: fadeUp 0.7s ease forwards;
-  animation-delay: 0.2125s; /* adjust timing here */
 }
 
 </style>
@@ -549,13 +546,17 @@ fetch("assets.json")
     const label = document.getElementById("assetIdLabel");
 
 if (label) {
-  if (currentAsset) {
-    label.textContent = currentAsset["Generated Asset ID"];
-    label.style.opacity = "1";
-  } else {
-    label.textContent = "INVALID ASSET";
-    label.style.color = "rgba(255,100,100,0.8)";
-  }
+  label.textContent = currentAsset
+    ? currentAsset["Generated Asset ID"]
+    : "INVALID ASSET";
+
+  label.style.color = currentAsset
+    ? "#ff4d4d"
+    : "rgba(255,100,100,0.8)";
+
+  requestAnimationFrame(() => {
+    label.classList.add("show");
+  });
 }
 
     setupButtons();
