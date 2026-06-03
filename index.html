@@ -327,21 +327,15 @@ svg a:focus {
 
 .asset-id-text {
   margin-top: 10px;
-
   font-family: Helvetica, Arial, sans-serif;
   font-size: 15px;
   font-weight: 600;
   letter-spacing: 1px;
-
   color: #ff4d4d;
-
   user-select: none;
 
   opacity: 0;
   transform: translateY(10px);
-
-  animation: fadeUp 0.7s ease forwards;
-  animation-delay: 0.2125s; /* adjust timing here */
 }
 
 </style>
@@ -358,8 +352,8 @@ svg a:focus {
 <h1>ASSET PORTAL</h1>
 <p>Asset Links Below</p>
 
-<div id="assetIdLabel" class="asset-id-text">
-  —
+<div id="assetIdLabel" class="asset-id-text"></div>
+
 </div>
 
 <div class="links">
@@ -550,12 +544,11 @@ fetch("assets.json")
 
 if (label) {
   if (currentAsset) {
-    label.textContent = currentAsset["Generated Asset ID"];
-    label.style.opacity = "1";
-  } else {
-    label.textContent = "INVALID ASSET";
-    label.style.color = "rgba(255,100,100,0.8)";
-  }
+  label.textContent = currentAsset["Generated Asset ID"];
+
+  requestAnimationFrame(() => {
+    label.style.animation = "fadeUp 0.7s ease forwards";
+  });
 }
 
     setupButtons();
