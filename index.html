@@ -336,7 +336,10 @@ svg a:focus {
 <body>
 
 <a href="https://www.unionstationla.com/" target="_blank">
-  <img src="LAUSLogo.png" alt="Union Station Logo">
+  <img
+    id="assetLogo"
+    src="LAUSLogo.png"
+    alt="Asset Logo">
 </a>
 
 <div class="page-content">
@@ -530,6 +533,18 @@ fetch("assets.json")
   String(a["Generated Asset ID"] || "").trim() === String(decodedId).trim()
 );
 
+    const logo = document.getElementById("assetLogo");
+
+if (currentAsset && currentAsset.Image) {
+  logo.src = currentAsset.Image;
+
+  logo.onerror = function () {
+    this.src = "LAUSLogo.png";
+  };
+} else {
+  logo.src = "LAUSLogo.png";
+}
+    
     console.log("Matched asset:", currentAsset);
 
     const label = document.getElementById("assetIdLabel");
