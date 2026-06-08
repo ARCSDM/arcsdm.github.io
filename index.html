@@ -330,18 +330,32 @@ svg a:focus {
   animation: fadeUp 0.7s ease forwards;
 }
 
+.footer-logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+
+  margin-top: 30px;
+}
+
+.footer-logos img {
+  width: 110px;
+  height: auto;
+
+  box-shadow: none;
+  margin: 0;
+}
+
 </style>
 </head>
 
 <body>
-
-<a href="https://www.unionstationla.com/" target="_blank">
-  <img
-    id="assetLogo"
-    src="LAUSLogo.png"
-    alt="Asset Logo">
-</a>
-
+<img
+  id="assetLogo"
+  src="LAUSLogo.png"
+  alt="Asset Image">
+  
 <div class="page-content">
   
 <h1>ASSET PORTAL</h1>
@@ -359,9 +373,17 @@ svg a:focus {
 
 </div>
   
-<a href="https://arc-corporate.com/" target="_blank">
-  <img src="ARC_Profile.png" alt="ARC Logo">
-</a>
+<div class="footer-logos">
+
+  <a href="https://www.unionstationla.com/" target="_blank">
+    <img src="LAUSLogo.png" alt="LAUS Logo">
+  </a>
+
+  <a href="https://arc-corporate.com/" target="_blank">
+    <img src="ARC_Profile.png" alt="ARC Logo">
+  </a>
+
+</div>
 
 <div id="imageModal" class="modal">  
 <div class="modal-content">
