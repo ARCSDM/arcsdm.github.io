@@ -63,10 +63,24 @@
     "Image": "AssetImages/LAUS-E3D12-N-OFF-L01-EL-DSSP01.png"
   },
   {
-    "Generated Asset ID":"LAUS-E3C11-N-OFF-L01-EL-SWLGHT01",
+    "Generated Asset ID":"LAUS-E3E10-N-OFF-B01-EL-XFMRMV01",
+    "Matterport":"https://my.matterport.com/show/?m=aURcSJvpYMU&play=0&ss=341&sr=-1.22%2C-1.21&tag=Dn5UxzV1y3z&pin-pos=-29.94%2C-2.94%2C65.29",
+    "Skand":"",
+    "Corrigo":"",
+    "Image": "AssetImages/LAUS-E3E10-N-OFF-B01-EL-XFMRMV01.png"
+  },
+  {
+    "Generated Asset ID":"LAUS-E3A8-N-OFF-B01-EL-XFMRHV01",
+    "Matterport":"https://my.matterport.com/show/?m=aURcSJvpYMU&play=0&ss=354&sr=.95%2C1.16&tag=EqkCWvFXVLW&pin-pos=-40.87%2C-2.31%2C61.31",
+    "Skand":"",
+    "Corrigo":"",
+    "Image": "AssetImages/LAUS-E3A8-N-OFF-B01-EL-XFMRHV01.png"
+  },
+  {
+    "Generated Asset ID":"LAUS-E3E10-N-OFF-B01-EL-XFMRMV01",
     "Matterport":"",
     "Skand":"",
     "Corrigo":"",
-    "Image": "AssetImages/.png"
-  }
+    "Image": "AssetImages/LAUS-E3E10-N-OFF-B01-EL-XFMRMV01.png"
+  },
 ]
