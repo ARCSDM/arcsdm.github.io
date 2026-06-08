@@ -3,60 +3,70 @@
     "Generated Asset ID":"LAUS-C4S4-S-PAT-EL-XFMRLV01",
     "Matterport":"https:\/\/my.matterport.com\/show\/?m=qwcoKpTrRVJ&play=0&ss=114&sr=-3.09%2C-.45&tag=JtCMdLO13Z8&pin-pos=-3.67%2C.49%2C27.5",
     "Skand":"https://app.skand.io/explore?project=68ffb07f517dec004d2c2697&annotation=6a1dfa3812059d004d6dcd8e&shareLinkToken=2ab2f425-adbb-4947-93ae-a6f102a30772",
-    "Corrigo":""
+    "Corrigo":"",
+    "Image": ""
   },
   {
     "Generated Asset ID":"LAUS-C4T4-S-PAT-EL-JBDST01",
     "Matterport":"https://my.matterport.com/show/?m=qwcoKpTrRVJ&play=0&ss=114&sr=-2.63%2C.09&tag=oGK2aGlE5GX&pin-pos=-4.71%2C.53%2C26.49",
     "Skand":"",
-    "Corrigo":""
+    "Corrigo":"",
+    "Image": ""
   },
   {
     "Generated Asset ID":"LAUS-C4S4-S-PAT-EL-LFPATH01",
     "Matterport":"https://my.matterport.com/show/?m=qwcoKpTrRVJ&play=0&ss=44&sr=-.62%2C-.52&tag=nf395LgKzFy&pin-pos=-4.5%2C.15%2C28.2",
     "Skand":"",
-    "Corrigo":""
+    "Corrigo":"",
+    "Image": ""
   },
   {
     "Generated Asset ID":"LAUS-C4S5-S-PAT-EL-CONDLB01",
     "Matterport":"https://my.matterport.com/show/?m=qwcoKpTrRVJ&play=0&ss=116&sr=-2.54%2C.72&tag=e45jV2jKLfs&pin-pos=-2.19%2C.02%2C27.21",
     "Skand":"",
-    "Corrigo":""
+    "Corrigo":"",
+    "Image": ""
   },
   {
     "Generated Asset ID":"LAUS-C4S4-S-PAT-EL-RECTWL01",
     "Matterport":"https://my.matterport.com/show/?m=qwcoKpTrRVJ&play=0&ss=114&sr=-2.64%2C-.36&tag=vDUTmioU8OW&pin-pos=-3.57%2C.44%2C27.1",
     "Skand":"",
-    "Corrigo":""
+    "Corrigo":"",
+    "Image": ""
   },
   {
     "Generated Asset ID":"LAUS-C4S4-S-PAT-EL-LFSPT01",
     "Matterport":"https://my.matterport.com/show/?m=qwcoKpTrRVJ&play=0&ss=114&sr=-2.51%2C.03&tag=EwzjxQlXYDu&pin-pos=-4.47%2C.19%2C26.95",
     "Skand":"",
-    "Corrigo":""
+    "Corrigo":"",
+    "Image": ""
   },
   {
     "Generated Asset ID":"LAUS-E3C11-N-OFF-L01-EL-PNLSUB01",
-    "Matterport":"",
+    "Matterport":"https://my.matterport.com/show/?m=aURcSJvpYMU&play=0&ss=2055&sr=-.65%2C-1.33&tag=YFAjOmXhkU6&pin-pos=-36.43%2C1.38%2C69.85",
     "Skand":"",
-    "Corrigo":""
+    "Corrigo":"",
+    "Image": "AssetImages/LAUS-E3C11-N-OFF-L01-EL-PNLSUB01.png"
   },
   {
     "Generated Asset ID":"LAUS-E3C11-N-OFF-L01-EL-PNLSUB02",
     "Matterport":"",
     "Skand":"",
-    "Corrigo":""
+    "Corrigo":"",
+    "Image": ""
   },
   {
     "Generated Asset ID":"LAUS-E3C12-N-OFF-L01-EL-PNLSUB01",
     "Matterport":"",
     "Skand":"",
-    "Corrigo":""
+    "Corrigo":"",
+    "Image": ""
   },
   {
     "Generated Asset ID":"LAUS-E3C11-N-OFF-L01-EL-SWLGHT01",
     "Matterport":"",
     "Skand":"",
-    "Corrigo":""
+    "Corrigo":"",
+    "Image": ""
   }
 ]
