@@ -134,14 +134,6 @@
     margin: 0 auto 15px;
   }
 
-  a:last-of-type img {
-    
-    opacity: 0;
-    animation: fadeUp 0.5s ease forwards;
-    animation-delay: 0.7s;
-
-    box-shadow: none;
-  }
 
 .page-content h1 {
     margin-bottom: 12px;
@@ -337,12 +329,17 @@ svg a:focus {
   margin-top: 30px;
 }
 
-.footer-logos img {
-  height: 60px;
-  width: auto;
+.footer-logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
 
-  box-shadow: none;
-  margin: 0;
+  margin-top: 30px;
+
+  opacity: 0;
+  animation: fadeUp 0.5s ease forwards;
+  animation-delay: 0.7s;
 }
 
 </style>
@@ -373,12 +370,12 @@ svg a:focus {
   
 <div class="footer-logos">
 
-  <a href="https://www.unionstationla.com/" target="_blank">
-    <img src="LAUSLogo2.png" alt="LAUS Logo">
+  <a href="https://arc-corporate.com/" target="_blank">
+    <img class="footer-logo" src="ARC_Profile.png" alt="ARC Logo">
   </a>
 
-  <a href="https://arc-corporate.com/" target="_blank">
-    <img src="ARC_Profile.png" alt="ARC Logo">
+  <a href="https://www.unionstationla.com/" target="_blank">
+    <img class="footer-logo" src="LAUSLogo.png" alt="LAUS Logo">
   </a>
 
 </div>
