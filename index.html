@@ -10,7 +10,6 @@
   body {
     margin: 0;
     font-family: Helvetica, Arial, sans-serif;
-    background: linear-gradient(to top, #0f2027, #203a43, #2c5364);
     color: white;
     text-align: center;
     padding: 70px 20px 30px;
@@ -350,7 +349,19 @@ body:not(.ready) * { animation-play-state: paused !important; }
 html {
   background-color: #2c5364;
 }
-
+  
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  height: 100lvh;
+  background: linear-gradient(to top, #0f2027, #203a43, #2c5364);
+  z-index: -1;
+}
+  
 </style>
 </head>
 
