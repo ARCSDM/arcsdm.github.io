@@ -398,11 +398,7 @@ body::before {
   —
 </div>
 
-<div class="links">
-  <a class="link matterport-link" id="matterportBtn" href="#">Matterport</a>
-  <a class="link skand-link" id="skandBtn" href="#">Skand</a>
-  <a class="link corrigo-link" id="corrigoBtn" href="#">Corrigo</a>
-</div>
+<div class="links" id="linksBox"></div>
 
 </div>
   
@@ -477,20 +473,24 @@ function closeCorrigoModal() {
   document.activeElement.blur();
 }
 
-function setupButtons() {
-  const buttons = [
-    { id: "matterportBtn", field: "Matterport" },
-    { id: "skandBtn",      field: "Skand" },
-    { id: "corrigoBtn",    field: "Corrigo" }
-  ];
+const NON_LINK_FIELDS = ["Generated Asset ID", "Organization", "Image"];
 
-  buttons.forEach(({ id, field }) => {
-    const btn = document.getElementById(id);
-    if (!btn) return;
+function setupButtons() {
+  const box = document.getElementById("linksBox");
+  box.innerHTML = "";
+
+  const fields = currentAsset
+    ? Object.keys(currentAsset).filter(k => !NON_LINK_FIELDS.includes(k))
+    : ["Matterport", "Skand", "Corrigo"];
+
+  fields.forEach(field => {
+    const btn = document.createElement("a");
+    btn.className = "link";
+    btn.href = "#";
+    btn.textContent = field;
 
     btn.addEventListener("click", function (e) {
       e.preventDefault();
-
       const link = currentAsset?.[field];
 
       if (link && link !== "a") {
@@ -499,6 +499,8 @@ function setupButtons() {
         openCorrigoModal(field);
       }
     });
+
+    box.appendChild(btn);
   });
 }
 
