@@ -513,7 +513,7 @@ function revealPage() {
 }
 setTimeout(revealPage, 1500);
   
-fetch("assets.json")
+fetch("assets.json", { cache: "no-store" })
   .then(res => res.json())
   .then(data => {
     assetData = data;
