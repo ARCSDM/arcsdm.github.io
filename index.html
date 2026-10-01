@@ -361,7 +361,26 @@ body::before {
   background: linear-gradient(to top, #0f2027, #203a43, #2c5364);
   z-index: -1;
 }
- 
+  
+/* ---- Background ---- */
+html {
+  background-color: #0f2027;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: -100vh;
+  height: 300vh;
+  background: linear-gradient(to bottom,
+    #2c5364 0%,     #2c5364 33.33%,
+    #203a43 50%,
+    #0f2027 66.67%, #0f2027 100%);
+  z-index: -1;
+}
+  
 </style>
 </head>
 
