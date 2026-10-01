@@ -511,23 +511,19 @@ let currentAsset = null;
 function revealPage() {
   document.body.classList.add("ready");
 }
-setTimeout(revealPage, 1500);
+setTimeout(revealPage, 4000);
   
-fetch("assets.json", { cache: "no-store" })
+const API_URL = "https://script.google.com/home/projects/1NFdOfqvVA-cWFdgfcgZawvETFOPwKMxUYOoXpy3WHrSbzM6RzYGBB5oU/edit";
+
+const params = new URLSearchParams(window.location.search);
+const decodedId = (params.get("id") || "").trim();
+
+console.log("ID from QR:", decodedId);
+
+fetch(API_URL + "?id=" + encodeURIComponent(decodedId), { cache: "no-store" })
   .then(res => res.json())
-  .then(data => {
-    assetData = data;
-
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
-
-    const decodedId = decodeURIComponent(id || "").trim();
-
-    console.log("ID from QR:", decodedId);
-
-    currentAsset = assetData.find(a =>
-  String(a["Generated Asset ID"] || "").trim() === String(decodedId).trim()
-);
+  .then(asset => {
+    currentAsset = asset;
 
     const org = applyOrg(currentAsset);
     const logo = document.getElementById("assetLogo");
