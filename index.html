@@ -378,26 +378,6 @@ svg a:focus {
 
 </div>
 
-<div id="imageModal" class="modal">  
-<div class="modal-content">
-  <div class="modal-inner">
-    <h2>Select Desired Link</h2>
-
-    <a class="link"
-       href="https://my.matterport.com/show/?m=qwcoKpTrRVJ&play=0&ss=114&sr=-3.09%2C-.45&tag=JtCMdLO13Z8&pin-pos=-3.67%2C.49%2C27.5"
-       target="_blank">
-      Location of Asset
-    </a>
-    
-    <a class="link"
-       href="https://my.matterport.com/show/?m=qwcoKpTrRVJ&play=0&ss=151&sr=-.57%2C-1.55&tag=UuwsxyY1Gct&pin-pos=-41.37%2C1.56%2C18.46"
-       target="_blank">
-      South Patio Tour
-    </a>
-  </div>
-</div>
-</div>
-
 <div id="corrigoModal" class="modal">  
 <div class="modal-content">
   <div class="modal-inner">
@@ -406,7 +386,7 @@ svg a:focus {
 
     <p>
       No asset information exists on this platform.<br>
-      Click below to request this asset be added to Corrigo.
+      Click below to request this asset be added to <span id="requestPlatform">Corrigo</span>.
     </p>
 
     
@@ -431,7 +411,7 @@ const ORGS = {
   },
   BRAGG: {
     name: "BRAGG",
-    footerLogo: "BRAGGLogoFooter.png",
+    footerLogo: "BRAGGLogo.png",
     headerLogo: "BRAGGLogo.png",
     url: "https://www.braggcompanies.com/"
   }
@@ -446,19 +426,8 @@ function applyOrg(asset) {
   footerLogo.alt = org.name + " Logo";
   return org;
 }    
-function openModal() {
-  const modal = document.getElementById("imageModal");
-
-modal.classList.add("show");
-}
-
-function closeModal() {
-  const modal = document.getElementById("imageModal");
-  modal.classList.remove("show");
-  document.activeElement.blur();
-}
-
-function openCorrigoModal() {
+function openCorrigoModal(platform) {
+  document.getElementById("requestPlatform").textContent = platform || "Corrigo";
   document.getElementById("corrigoModal").classList.add("show");
 }
 
@@ -469,75 +438,34 @@ function closeCorrigoModal() {
 }
 
 function setupButtons() {
-  const matterportBtn = document.getElementById("matterportBtn");
-  const corrigoBtn = document.getElementById("corrigoBtn");
-  const skandBtn = document.getElementById("skandBtn");
+  const buttons = [
+    { id: "matterportBtn", field: "Matterport" },
+    { id: "skandBtn",      field: "Skand" },
+    { id: "corrigoBtn",    field: "Corrigo" }
+  ];
 
-  if (matterportBtn) {
-    matterportBtn.addEventListener("click", function (e) {
+  buttons.forEach(({ id, field }) => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+
+    btn.addEventListener("click", function (e) {
       e.preventDefault();
 
-      if (!currentAsset) {
-        openModal();
-        return;
-      }
-
-      const link = currentAsset?.Matterport;
+      const link = currentAsset?.[field];
 
       if (link && link !== "a") {
         window.open(link, "_blank");
       } else {
-        openModal();
+        openCorrigoModal(field);
       }
     });
-  }
-
-  if (corrigoBtn) {
-    corrigoBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-
-      if (!currentAsset) {
-        openCorrigoModal();
-        return;
-      }
-
-      const link = currentAsset?.Corrigo;
-
-      if (link && link !== "a") {
-        window.open(link, "_blank");
-      } else {
-        openCorrigoModal();
-      }
-    });
-  }
-
-  if (skandBtn) {
-    skandBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-
-      if (!currentAsset) return;
-
-      const link = currentAsset?.Skand;
-
-      if (link && link !== "a") {
-        window.open(link, "_blank");
-      }
-    });
-  }
+  });
 }
 
-document.getElementById("corrigoModal").addEventListener("click", function(e) {
-  if (e.target === this) {
-    closeCorrigoModal();
-  }
-});
-
-  
 /* click outside to close */
 document.querySelectorAll(".modal").forEach(modal => {
   modal.addEventListener("click", function(e) {
     if (e.target === modal) {
-      closeModal();
       closeCorrigoModal();
     }
   });
@@ -546,7 +474,6 @@ document.querySelectorAll(".modal").forEach(modal => {
 /* press ESC to close */
 document.addEventListener("keydown", function(e) {
   if (e.key === "Escape") {
-    closeModal();
     closeCorrigoModal();
     document.activeElement.blur();
   }
