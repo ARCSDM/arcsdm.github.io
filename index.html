@@ -368,8 +368,8 @@ svg a:focus {
   
 <div class="footer-logos">
 
-  <a href="https://www.unionstationla.com/" target="_blank">
-    <img class="footer-logo" src="LAUSLogo2.png" alt="LAUS Logo">
+  <a id="orgLink" href="https://www.unionstationla.com/" target="_blank">
+    <img id="orgLogo" class="footer-logo" src="LAUSLogo2.png" alt="LAUS Logo">
   </a>
   
   <a href="https://arc-corporate.com/" target="_blank">
@@ -422,7 +422,30 @@ svg a:focus {
 </div>
     
 <script>
-    
+const ORGS = {
+  LAUS: {
+    name: "LAUS",
+    footerLogo: "LAUSLogo2.png",
+    headerLogo: "LAUSLogo.png",
+    url: "https://www.unionstationla.com/"
+  },
+  BRAGG: {
+    name: "BRAGG",
+    footerLogo: "ACMELogoFooter.png",
+    headerLogo: "ACMELogo.png",
+    url: "https://www.braggcompanies.com/"
+  }
+};
+const DEFAULT_ORG = "LAUS";
+
+function applyOrg(asset) {
+  const org = ORGS[asset?.Organization] || ORGS[DEFAULT_ORG];
+  document.getElementById("orgLink").href = org.url;
+  const footerLogo = document.getElementById("orgLogo");
+  footerLogo.src = org.footerLogo;
+  footerLogo.alt = org.name + " Logo";
+  return org;
+}    
 function openModal() {
   const modal = document.getElementById("imageModal");
 
@@ -548,16 +571,17 @@ fetch("assets.json")
   String(a["Generated Asset ID"] || "").trim() === String(decodedId).trim()
 );
 
+    const org = applyOrg(currentAsset);
     const logo = document.getElementById("assetLogo");
 
 if (currentAsset && currentAsset.Image) {
   logo.src = currentAsset.Image;
 
   logo.onerror = function () {
-    this.src = "LAUSLogo.png";
+    this.src = org.headerLogo;
   };
 } else {
-  logo.src = "LAUSLogo.png";
+  logo.src = org.headerLogo;
 }
     
     console.log("Matched asset:", currentAsset);
