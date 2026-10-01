@@ -213,11 +213,6 @@
     }
   }
 
-  a:first-of-type img {
-    opacity: 0;
-    animation: fadeUp 0.7s ease forwards;
-  }
-
 svg a {
   outline: none;
 }
@@ -315,9 +310,6 @@ svg a:focus {
   transform: translateY(10px);
 }
 
-.asset-id-text.show {
-  animation: fadeUp 0.7s ease forwards;
-}
 .footer-logos {
   display: flex;
   justify-content: center;
@@ -340,13 +332,25 @@ svg a:focus {
   border-radius: 0;
 }
 
+body { box-sizing: border-box; }
+
+body:not(.ready) * { animation-play-state: paused !important; }
+
+#assetLogo                              { opacity: 0; animation: fadeUp 0.6s ease forwards; }
+.page-content h1                        { animation-duration: 0.6s; animation-delay: 0.08s; }
+.page-content p                         { animation-duration: 0.6s; animation-delay: 0.16s; }
+.asset-id-text                          { animation: fadeUp 0.6s ease forwards; animation-delay: 0.24s; }
+.page-content .links .link:nth-child(1) { animation-duration: 0.6s; animation-delay: 0.32s; }
+.page-content .links .link:nth-child(2) { animation-duration: 0.6s; animation-delay: 0.40s; }
+.page-content .links .link:nth-child(3) { animation-duration: 0.6s; animation-delay: 0.48s; }
+.footer-logos                           { animation-duration: 0.6s; animation-delay: 0.60s; }
+  
 </style>
 </head>
 
 <body>
 <img
   id="assetLogo"
-  src="LAUSLogo.png"
   alt="Asset Image">
   
 <div class="page-content">
@@ -369,7 +373,7 @@ svg a:focus {
 <div class="footer-logos">
 
   <a id="orgLink" href="https://www.unionstationla.com/" target="_blank">
-    <img id="orgLogo" class="footer-logo" src="LAUSLogo2.png" alt="LAUS Logo">
+    <img id="orgLogo" class="footer-logo" alt="LAUS Logo">
   </a>
   
   <a href="https://arc-corporate.com/" target="_blank">
@@ -482,6 +486,11 @@ document.addEventListener("keydown", function(e) {
 let assetData = [];
 let currentAsset = null;
 
+function revealPage() {
+  document.body.classList.add("ready");
+}
+setTimeout(revealPage, 1500);
+  
 fetch("assets.json")
   .then(res => res.json())
   .then(data => {
@@ -510,6 +519,8 @@ if (currentAsset && currentAsset.Image) {
 } else {
   logo.src = org.headerLogo;
 }
+logo.addEventListener("load", revealPage, { once: true });
+logo.addEventListener("error", revealPage, { once: true });
     
     console.log("Matched asset:", currentAsset);
 
@@ -530,7 +541,8 @@ if (label) {
 }
 
     setupButtons();
-  });
+  })
+  .catch(revealPage);
   
 </script> 
   
