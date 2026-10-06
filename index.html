@@ -220,21 +220,6 @@
       border-radius: 0;
     }
 
-    .status-message {
-      display: none;
-      margin-top: 24px;
-      padding: 14px 16px;
-      border: 1px solid #E4E8EB;
-      border-radius: 10px;
-      background: #F8FAFB;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.45;
-      text-align: center;
-    }
-
-    .status-message.show { display: block; }
-
     .loading .friendly-id,
     .loading .bam-id,
     .loading .organization-name {
@@ -269,19 +254,6 @@
         animation: none !important;
       }
     }
-
-    .asset-photo {
-      display: none;
-      width: 112px;
-      height: 112px;
-      margin: 0 0 22px;
-      border-radius: 14px;
-      object-fit: cover;
-      background: var(--soft);
-      border: 1px solid var(--line);
-    }
-
-    .asset-photo.show { display: block; }
   </style>
 </head>
 <body>
@@ -290,8 +262,6 @@
       <div class="top-rule" aria-hidden="true"></div>
 
       <div class="card-inner">
-        <img id="assetPhoto" class="asset-photo" alt="Asset photo">
-
         <p class="eyebrow">Asset Portal</p>
 
         <h1 id="friendlyId" class="friendly-id">Loading</h1>
@@ -302,12 +272,18 @@
           <span id="organizationName" class="organization-name">Loading</span>
         </div>
 
+        <div id="assetImageWrap" class="asset-image-wrap">
+          <img
+            id="assetImage"
+            class="asset-image"
+            alt="Asset image"
+          >
+        </div>
+
         <div class="asset-links" aria-label="Digital asset access">
           <a id="matterportLink" class="asset-link is-disabled" href="#" target="_blank" rel="noopener noreferrer">Open in Matterport</a>
           <a id="skandLink" class="asset-link is-disabled" href="#" target="_blank" rel="noopener noreferrer">Open in SKAND</a>
         </div>
-
-        <div id="statusMessage" class="status-message"></div>
 
         <div class="brand-zone">
           <div class="brand-logos">
@@ -316,7 +292,7 @@
             </a>
 
             <a class="brand-link" href="https://arc-corporate.com/" target="_blank" rel="noopener noreferrer" aria-label="Architectural Resource Consultants website">
-              <img class="brand-logo" src="ARC_Profile.png" alt="Architectural Resource Consultants logo">
+              <img class="brand-logo" src="original_whiteletters.png" alt="Architectural Resource Consultants logo">
             </a>
           </div>
 
@@ -324,7 +300,7 @@
 
           <div class="powered-by">
             <span>Powered by</span>
-            <img class="bam-logo" src="BAMLogo.png" alt="BAM">
+            <img class="bam-logo" src="BAM_Logo-lightbg.png" alt="BAM">
           </div>
         </div>
       </div>
@@ -378,7 +354,7 @@
 
     function configureOrganization(asset) {
       const { rawOrganization, config } = organizationConfig(asset);
-      const orgName = ORGS[rawOrganization]?.name || rawOrganization || "Organization";
+      const orgName = rawOrganization || config?.name || "Organization";
       document.getElementById("organizationName").textContent = orgName;
 
       const orgLink = document.getElementById("orgLink");
@@ -396,6 +372,31 @@
       }
     }
 
+    function configureAssetImage(asset) {
+      const imageUrl =
+        firstValue(asset, FIELD_NAMES.image);
+
+      const wrap = document.getElementById("assetImageWrap");
+      const image = document.getElementById("assetImage");
+
+      if (!imageUrl) {
+        wrap.classList.remove("show");
+        image.removeAttribute("src");
+        return;
+      }
+
+      image.onload = function () {
+        wrap.classList.add("show");
+      };
+
+      image.onerror = function () {
+        wrap.classList.remove("show");
+        image.removeAttribute("src");
+      };
+
+      image.src = imageUrl;
+    }
+
     function configureAssetLink(elementId, url) {
       const link = document.getElementById(elementId);
       if (url && url !== "a" && url !== "#" && /^https?:\/\//i.test(url)) {
@@ -407,12 +408,6 @@
         link.classList.add("is-disabled");
         link.setAttribute("aria-disabled", "true");
       }
-    }
-
-    function showStatus(message) {
-      const status = document.getElementById("statusMessage");
-      status.textContent = message;
-      status.classList.add("show");
     }
 
     function finishLoading() {
@@ -428,13 +423,8 @@
       document.getElementById("friendlyId").textContent = friendlyId || "ASSET";
       document.getElementById("bamId").textContent = bamId || "BAM ID NOT AVAILABLE";
 
-      const photo = document.getElementById("assetPhoto");
-      if (asset.Image) {
-        photo.onload = () => photo.classList.add("show");
-        photo.src = asset.Image;
-      }
-
       configureOrganization(asset);
+      configureAssetImage(asset);
       configureAssetLink("matterportLink", matterport);
       configureAssetLink("skandLink", skand);
 
