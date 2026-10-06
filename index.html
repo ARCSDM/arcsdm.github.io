@@ -3,43 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#eef2f5">
   <title>Asset Portal</title>
+
   <style>
     :root {
       --arc-blue: #2075B7;
+      --accent: #B41F78;
       --ink: #20262C;
-      --muted: #6F7881;
-      --line: #E6EAED;
-      --soft: #F7F9FA;
+      --muted: #707A83;
+      --line: #E5E9EC;
+      --soft: #F6F8F9;
       --white: #FFFFFF;
-      --shadow: 0 18px 45px rgba(26, 39, 51, 0.10);
-      --radius-lg: 20px;
-      --radius-md: 12px;
+      --shadow: 0 18px 45px rgba(26,39,51,.10);
     }
 
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html { background: #EEF2F5; }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      min-height: 100%;
+      background: #EEF2F5;
+    }
 
     body {
       margin: 0;
       min-height: 100vh;
-      min-height: 100dvh;
       font-family: Helvetica, Arial, sans-serif;
       color: var(--ink);
-      background: linear-gradient(180deg, #F7F9FB 0%, #EEF2F5 100%);
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: max(26px, env(safe-area-inset-top)) 18px max(26px, env(safe-area-inset-bottom));
+      background: linear-gradient(180deg,#F8FAFB 0%,#EEF2F5 100%);
+      padding: 26px 16px;
     }
 
-    .portal-shell { width: 100%; max-width: 560px; }
+    .portal-shell {
+      width: 100%;
+      max-width: 560px;
+      margin: 0 auto;
+    }
 
     .portal-card {
+      width: 100%;
       background: var(--white);
-      border: 1px solid rgba(32, 117, 183, 0.08);
-      border-radius: var(--radius-lg);
+      border: 1px solid rgba(32,117,183,.08);
+      border-radius: 20px;
       box-shadow: var(--shadow);
       overflow: hidden;
     }
@@ -51,43 +59,44 @@
       height: 6px;
     }
 
-    .top-rule::before { content: ""; background: #B41F78; }
-    .top-rule::after { content: ""; background: var(--arc-blue); }
+    .top-rule span:first-child { background: var(--accent); }
+    .top-rule span:last-child  { background: var(--arc-blue); }
 
-    .card-inner { padding: 34px 30px 28px; }
+    .content {
+      padding: 34px 30px 28px;
+    }
 
     .eyebrow {
       margin: 0 0 10px;
-      font-size: 12px;
-      line-height: 1.2;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
       color: var(--arc-blue);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
     }
 
     .friendly-id {
       margin: 0;
-      font-size: clamp(34px, 8vw, 48px);
+      color: var(--ink);
+      font-size: clamp(34px,8vw,48px);
       line-height: 1;
       font-weight: 800;
-      letter-spacing: -0.035em;
-      color: var(--ink);
+      letter-spacing: -.035em;
       overflow-wrap: anywhere;
     }
 
     .bam-id {
       margin: 10px 0 0;
+      color: var(--muted);
       font-size: 14px;
       line-height: 1.35;
       font-weight: 700;
-      letter-spacing: 0.045em;
-      color: var(--muted);
+      letter-spacing: .045em;
       overflow-wrap: anywhere;
     }
 
     .organization {
-      margin: 22px 0 0;
+      margin-top: 22px;
       padding-top: 20px;
       border-top: 1px solid var(--line);
     }
@@ -95,65 +104,99 @@
     .organization-label {
       display: block;
       margin-bottom: 5px;
+      color: #8A9299;
       font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.08em;
+      letter-spacing: .08em;
       text-transform: uppercase;
-      color: #8A9299;
     }
 
     .organization-name {
       display: block;
+      min-height: 24px;
+      color: var(--ink);
       font-size: 18px;
       line-height: 1.35;
       font-weight: 700;
-      color: var(--ink);
     }
 
-    .asset-links { display: grid; gap: 12px; margin-top: 28px; }
+    .asset-image-wrap {
+      display: none;
+      margin-top: 26px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--soft);
+    }
+
+    .asset-image-wrap.visible {
+      display: block;
+    }
+
+    .asset-image {
+      display: block;
+      width: 100%;
+      max-height: 360px;
+      height: auto;
+      object-fit: contain;
+      background: var(--soft);
+    }
+
+    .asset-links {
+      display: grid;
+      gap: 12px;
+      margin-top: 26px;
+    }
 
     .asset-link {
-      width: 100%;
       min-height: 54px;
-      border: 1px solid var(--arc-blue);
-      border-radius: var(--radius-md);
       padding: 0 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      color: var(--arc-blue);
+      border: 1px solid var(--arc-blue);
+      border-radius: 12px;
       background: var(--white);
+      color: var(--arc-blue);
       text-decoration: none;
       font-size: 15px;
       font-weight: 700;
-      transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+      transition: background .18s ease,color .18s ease,transform .18s ease;
     }
 
-    .asset-link::after { content: "↗"; font-size: 17px; font-weight: 700; line-height: 1; }
+    .asset-link::after {
+      content: "↗";
+      font-size: 17px;
+    }
 
     .asset-link:hover {
-      color: var(--white);
       background: var(--arc-blue);
-      box-shadow: 0 8px 18px rgba(32, 117, 183, 0.18);
+      color: var(--white);
       transform: translateY(-1px);
     }
 
-    .asset-link:active { transform: translateY(0); }
-
-    .asset-link.is-disabled {
-      border-color: #D7DDE2;
+    .asset-link.disabled {
+      border-color: #D9DEE2;
       background: #F7F8F9;
-      color: #9AA2A9;
-      cursor: default;
+      color: #9BA3AA;
       pointer-events: none;
-      box-shadow: none;
     }
 
-    .asset-link.is-disabled::after { content: "—"; }
+    .asset-link.disabled::after {
+      content: "—";
+    }
+
+    .load-message {
+      margin: 14px 0 0;
+      color: #8A9299;
+      font-size: 12px;
+      line-height: 1.4;
+      text-align: center;
+    }
 
     .brand-zone {
-      margin-top: 32px;
+      margin-top: 28px;
       padding-top: 26px;
       border-top: 1px solid var(--line);
     }
@@ -161,138 +204,141 @@
     .brand-logos {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      align-items: center;
       gap: 24px;
+      align-items: center;
     }
 
     .brand-link {
-      min-height: 72px;
+      min-height: 74px;
+      padding: 8px 12px;
       display: flex;
-      align-items: center;
       justify-content: center;
-      padding: 6px 12px;
-      text-decoration: none;
+      align-items: center;
       border-radius: 10px;
-      transition: background 0.18s ease;
+      text-decoration: none;
     }
 
-    .brand-link:hover { background: var(--soft); }
+    .client-brand-link:hover {
+      background: var(--soft);
+    }
+
+    .arc-brand-link {
+      background: #20262C;
+    }
+
+    .arc-brand-link:hover {
+      background: #2B333A;
+    }
 
     .brand-logo {
       display: block;
       max-width: 100%;
-      max-height: 62px;
+      max-height: 60px;
       width: auto;
       height: auto;
       object-fit: contain;
-      box-shadow: none;
-      border-radius: 0;
+    }
+
+    .arc-brand-link .brand-logo {
+      max-height: 48px;
     }
 
     .solution-tagline {
       margin: 26px 0 0;
       text-align: center;
+      color: var(--ink);
       font-size: 15px;
       line-height: 1.35;
       font-weight: 800;
-      letter-spacing: 0.055em;
-      color: var(--ink);
+      letter-spacing: .055em;
     }
 
     .powered-by {
       margin-top: 10px;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       gap: 8px;
       color: var(--muted);
       font-size: 11px;
-      line-height: 1;
     }
 
     .bam-logo {
       display: block;
       width: auto;
       height: 22px;
-      max-width: 95px;
+      max-width: 100px;
       object-fit: contain;
-      box-shadow: none;
-      border-radius: 0;
     }
 
-    .loading .friendly-id,
-    .loading .bam-id,
-    .loading .organization-name {
-      color: transparent;
-      border-radius: 6px;
-      background: linear-gradient(90deg, #EDF0F2 25%, #F7F8F9 37%, #EDF0F2 63%);
-      background-size: 400% 100%;
-      animation: shimmer 1.3s ease infinite;
-    }
-
-    .loading .friendly-id { width: 54%; }
-    .loading .bam-id { width: 42%; }
-    .loading .organization-name { width: 48%; min-height: 24px; }
-
-    @keyframes shimmer {
-      0% { background-position: 100% 0; }
-      100% { background-position: -100% 0; }
-    }
-
-    @media (max-width: 520px) {
-      body { padding-left: 12px; padding-right: 12px; }
-      .card-inner { padding: 28px 22px 24px; }
+    @media (max-width:520px) {
+      body { padding: 14px 10px; }
+      .content { padding: 28px 22px 24px; }
       .brand-logos { gap: 14px; }
       .brand-link { padding-left: 6px; padding-right: 6px; }
-      .brand-logo { max-height: 54px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        scroll-behavior: auto !important;
-        transition: none !important;
-        animation: none !important;
-      }
     }
   </style>
 </head>
+
 <body>
   <main class="portal-shell">
-    <section class="portal-card loading" id="portalCard" aria-live="polite">
-      <div class="top-rule" aria-hidden="true"></div>
+    <section class="portal-card" id="portalCard">
+      <div class="top-rule" aria-hidden="true">
+        <span></span><span></span>
+      </div>
 
-      <div class="card-inner">
+      <div class="content">
         <p class="eyebrow">Asset Portal</p>
 
-        <h1 id="friendlyId" class="friendly-id">Loading</h1>
-        <p id="bamId" class="bam-id">Loading</p>
+        <h1 id="friendlyId" class="friendly-id">Loading Asset</h1>
+        <p id="bamId" class="bam-id">Retrieving asset record…</p>
 
         <div class="organization">
           <span class="organization-label">Client / Organization</span>
-          <span id="organizationName" class="organization-name">Loading</span>
+          <span id="organizationName" class="organization-name">—</span>
         </div>
 
         <div id="assetImageWrap" class="asset-image-wrap">
-          <img
-            id="assetImage"
-            class="asset-image"
-            alt="Asset image"
-          >
+          <img id="assetImage" class="asset-image" alt="Asset image">
         </div>
 
         <div class="asset-links" aria-label="Digital asset access">
-          <a id="matterportLink" class="asset-link is-disabled" href="#" target="_blank" rel="noopener noreferrer">Open in Matterport</a>
-          <a id="skandLink" class="asset-link is-disabled" href="#" target="_blank" rel="noopener noreferrer">Open in SKAND</a>
+          <a id="matterportLink" class="asset-link disabled" href="#" aria-disabled="true">
+            Open in Matterport
+          </a>
+
+          <a id="skandLink" class="asset-link disabled" href="#" aria-disabled="true">
+            Open in SKAND
+          </a>
         </div>
+
+        <p id="loadMessage" class="load-message">Connecting to asset registry…</p>
 
         <div class="brand-zone">
           <div class="brand-logos">
-            <a id="orgLink" class="brand-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="Client website">
+            <a
+              id="orgLink"
+              class="brand-link client-brand-link"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Client website"
+            >
               <img id="orgLogo" class="brand-logo" alt="Client logo">
             </a>
 
-            <a class="brand-link" href="https://arc-corporate.com/" target="_blank" rel="noopener noreferrer" aria-label="Architectural Resource Consultants website">
-              <img class="brand-logo" src="original_whiteletters.png" alt="Architectural Resource Consultants logo">
+            <a
+              class="brand-link arc-brand-link"
+              href="https://arc-corporate.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Architectural Resource Consultants website"
+            >
+              <img
+                class="brand-logo"
+                src="original_whiteletters.png"
+                alt="Architectural Resource Consultants"
+              >
             </a>
           </div>
 
@@ -300,7 +346,11 @@
 
           <div class="powered-by">
             <span>Powered by</span>
-            <img class="bam-logo" src="BAM_Logo-lightbg.png" alt="BAM">
+            <img
+              class="bam-logo"
+              src="BAM_Logo-lightbg.png"
+              alt="BAM"
+            >
           </div>
         </div>
       </div>
@@ -308,164 +358,150 @@
   </main>
 
   <script>
-    const ORGS = {
-      LAUS: {
-        name: "LAUS",
-        footerLogo: "LAUSLogo2.png",
-        url: "https://www.unionstationla.com/"
-      },
-      BRAGG: {
-        name: "BRAGG Companies",
-        footerLogo: "BRAGGLogo.png",
-        url: "https://www.braggcompanies.com/"
+    (function () {
+      "use strict";
+
+      console.log("ARC Asset Portal v5 loaded");
+
+      var API_URL =
+        "https://script.google.com/macros/s/AKfycbzpgb8SihK2Fo84NXWr6DqwXw7GNaXQhymVFqQlPol1S5DpcGKuKOh6vNyYR4z4l7lK/exec";
+
+      var REQUEST_TIMEOUT_MS = 12000;
+
+      var ORGS = {
+        LAUS: {
+          name: "LAUS",
+          logo: "LAUSLogo2.png",
+          url: "https://www.unionstationla.com/"
+        },
+        BRAGG: {
+          name: "BRAGG Companies",
+          logo: "BRAGGLogo.png",
+          url: "https://www.braggcompanies.com/"
+        }
+      };
+
+      function valueFrom(record, names) {
+        if (!record || !names) return "";
+
+        for (var i = 0; i < names.length; i++) {
+          var value = record[names[i]];
+
+          if (
+            value !== undefined &&
+            value !== null &&
+            String(value).trim() !== ""
+          ) {
+            return String(value).trim();
+          }
+        }
+
+        return "";
       }
-    };
 
-    const DEFAULT_ORG = "LAUS";
+      function setLink(id, url) {
+        var el = document.getElementById(id);
 
-    const API_URL = "https://script.google.com/macros/s/AKfycbzpgb8SihK2Fo84NXWr6DqwXw7GNaXQhymVFqQlPol1S5DpcGKuKOh6vNyYR4z4l7lK/exec";
-
-    const FIELD_NAMES = {
-      friendlyId: [
-        "Friendly Asset ID",
-        "Friendly ID",
-        "FriendlyID",
-        "Friendly_Id"
-      ],
-
-      bamId: [
-        "BAM Asset ID",
-        "Generated Asset ID",
-        "Asset ID",
-        "BAM ID"
-      ],
-
-      organization: [
-        "Organization",
-        "Client / Organization",
-        "Client"
-      ],
-
-      matterport: [
-        "Matterport",
-        "Matterport View",
-        "Matterport Link",
-        "Matterport URL"
-      ],
-
-      skand: [
-        "Skand",
-        "SKAND",
-        "SKAND View",
-        "Skand View",
-        "Skand Link",
-        "SKAND Link",
-        "Skand URL",
-        "SKAND URL"
-      ],
-
-      image: [
-        "Image",
-        "Asset Image",
-        "Asset Photo",
-        "Primary Image"
-      ]
-    };
-
-    function firstValue(record, keys) {
-      if (!record || !Array.isArray(keys)) return "";
-
-      for (const key of keys) {
-        const value = record[key];
-
-        if (
-          value !== undefined &&
-          value !== null &&
-          String(value).trim() !== ""
-        ) {
-          return String(value).trim();
+        if (url && /^https?:\/\//i.test(url)) {
+          el.href = url;
+          el.target = "_blank";
+          el.rel = "noopener noreferrer";
+          el.classList.remove("disabled");
+          el.removeAttribute("aria-disabled");
+        } else {
+          el.href = "#";
+          el.removeAttribute("target");
+          el.classList.add("disabled");
+          el.setAttribute("aria-disabled", "true");
         }
       }
 
-      return "";
-    }
+      function setOrganization(asset) {
+        var raw = valueFrom(asset, [
+          "Organization",
+          "Client / Organization",
+          "Client"
+        ]);
 
-    function organizationConfig(asset) {
-      const rawOrganization = firstValue(asset, FIELD_NAMES.organization);
-      return {
-        rawOrganization,
-        config: ORGS[rawOrganization] || ORGS[DEFAULT_ORG] || null
-      };
-    }
+        var config = ORGS[raw] || null;
+        var name = raw || (config ? config.name : "—");
 
-    function configureOrganization(asset) {
-      const { rawOrganization, config } = organizationConfig(asset);
-      const orgName = rawOrganization || config?.name || "Organization";
-      document.getElementById("organizationName").textContent = orgName;
+        document.getElementById("organizationName").textContent = name;
 
-      const orgLink = document.getElementById("orgLink");
-      const orgLogo = document.getElementById("orgLogo");
+        var link = document.getElementById("orgLink");
+        var logo = document.getElementById("orgLogo");
 
-      if (config) {
-        orgLink.href = config.url || "#";
-        orgLogo.src = config.footerLogo || "";
-        orgLogo.alt = orgName + " logo";
-      } else {
-        orgLink.href = "#";
-        orgLink.removeAttribute("target");
-        orgLogo.removeAttribute("src");
-        orgLogo.alt = orgName + " logo";
-      }
-    }
-
-    function configureAssetImage(asset) {
-      const imageUrl =
-        firstValue(asset, FIELD_NAMES.image);
-
-      const wrap = document.getElementById("assetImageWrap");
-      const image = document.getElementById("assetImage");
-
-      if (!imageUrl) {
-        wrap.classList.remove("show");
-        image.removeAttribute("src");
-        return;
+        if (config) {
+          link.href = config.url;
+          logo.src = config.logo;
+          logo.alt = config.name + " logo";
+        } else {
+          link.href = "#";
+          logo.removeAttribute("src");
+          logo.alt = "Client logo";
+        }
       }
 
-      image.onload = function () {
-        wrap.classList.add("show");
-      };
+      function setAssetImage(asset) {
+        var url = valueFrom(asset, [
+          "Image",
+          "Asset Image",
+          "Asset Photo",
+          "Primary Image"
+        ]);
 
-      image.onerror = function () {
-        wrap.classList.remove("show");
-        image.removeAttribute("src");
-      };
+        var wrap = document.getElementById("assetImageWrap");
+        var img = document.getElementById("assetImage");
 
-      image.src = imageUrl;
-    }
+        wrap.classList.remove("visible");
+        img.removeAttribute("src");
 
-    function configureAssetLink(elementId, url) {
-      const link = document.getElementById(elementId);
-      if (url && url !== "a" && url !== "#" && /^https?:\/\//i.test(url)) {
-        link.href = url;
-        link.classList.remove("is-disabled");
-        link.removeAttribute("aria-disabled");
-      } else {
-        link.href = "#";
-        link.classList.add("is-disabled");
-        link.setAttribute("aria-disabled", "true");
+        if (!url) return;
+
+        img.onload = function () {
+          wrap.classList.add("visible");
+        };
+
+        img.onerror = function () {
+          wrap.classList.remove("visible");
+          img.removeAttribute("src");
+        };
+
+        img.src = url;
       }
-    }
 
-    function finishLoading() {
-      document.getElementById("portalCard").classList.remove("loading");
-    }
+      function renderAsset(asset) {
+        var friendlyId = valueFrom(asset, [
+          "Friendly Asset ID",
+          "Friendly ID",
+          "FriendlyID",
+          "Friendly_Id"
+        ]);
 
-    function renderAsset(asset) {
-      try {
-        const friendlyId = firstValue(asset, FIELD_NAMES.friendlyId);
-        const bamId = firstValue(asset, FIELD_NAMES.bamId);
-        const matterport = firstValue(asset, FIELD_NAMES.matterport);
-        const skand = firstValue(asset, FIELD_NAMES.skand);
+        var bamId = valueFrom(asset, [
+          "BAM Asset ID",
+          "Generated Asset ID",
+          "Asset ID",
+          "BAM ID"
+        ]);
+
+        var matterport = valueFrom(asset, [
+          "Matterport",
+          "Matterport View",
+          "Matterport Link",
+          "Matterport URL"
+        ]);
+
+        var skand = valueFrom(asset, [
+          "Skand",
+          "SKAND",
+          "SKAND View",
+          "Skand View",
+          "Skand Link",
+          "SKAND Link",
+          "Skand URL",
+          "SKAND URL"
+        ]);
 
         document.getElementById("friendlyId").textContent =
           friendlyId || "ASSET";
@@ -473,59 +509,95 @@
         document.getElementById("bamId").textContent =
           bamId || "BAM ID NOT AVAILABLE";
 
-        configureOrganization(asset);
-        configureAssetImage(asset);
-        configureAssetLink("matterportLink", matterport);
-        configureAssetLink("skandLink", skand);
+        setOrganization(asset);
+        setAssetImage(asset);
+        setLink("matterportLink", matterport);
+        setLink("skandLink", skand);
 
-      } catch (error) {
-        console.error("Asset render error:", error);
-
-      } finally {
-        finishLoading();
+        document.getElementById("loadMessage").textContent = "";
       }
-    }
 
-    function renderInvalidAsset() {
-      document.getElementById("friendlyId").textContent =
-        "ASSET NOT FOUND";
+      function renderFailure(message) {
+        document.getElementById("friendlyId").textContent =
+          "ASSET UNAVAILABLE";
 
-      document.getElementById("bamId").textContent =
-        "No matching BAM asset record";
+        document.getElementById("bamId").textContent =
+          "Unable to retrieve asset record";
 
-      document.getElementById("organizationName").textContent =
-        "—";
+        document.getElementById("organizationName").textContent = "—";
 
-      configureAssetImage(null);
-      configureAssetLink("matterportLink", "");
-      configureAssetLink("skandLink", "");
+        setLink("matterportLink", "");
+        setLink("skandLink", "");
+        setAssetImage(null);
 
-      finishLoading();
-    }
+        document.getElementById("loadMessage").textContent =
+          message || "The asset registry could not be reached.";
+      }
 
-    const params = new URLSearchParams(window.location.search);
-    const decodedId = (params.get("id") || "").trim();
+      function fetchWithTimeout(url, timeoutMs) {
+        var controller = new AbortController();
+        var timer = setTimeout(function () {
+          controller.abort();
+        }, timeoutMs);
 
-    if (!decodedId) {
-      renderInvalidAsset();
-    } else {
-      fetch(API_URL + "?id=" + encodeURIComponent(decodedId), { cache: "no-store" })
-        .then(response => {
-          if (!response.ok) throw new Error("Asset request failed: " + response.status);
-          return response.json();
-        })
-        .then(asset => {
-          if (!asset || typeof asset !== "object" || Array.isArray(asset)) {
-            renderInvalidAsset();
-            return;
-          }
-          renderAsset(asset);
-        })
-        .catch(error => {
-          console.error("Asset portal error:", error);
-          renderInvalidAsset();
+        return fetch(url, {
+          cache: "no-store",
+          signal: controller.signal
+        }).finally(function () {
+          clearTimeout(timer);
         });
-    }
+      }
+
+      function start() {
+        var params = new URLSearchParams(window.location.search);
+        var assetId = String(params.get("id") || "").trim();
+
+        if (!assetId) {
+          renderFailure("No asset ID was supplied in the QR-code URL.");
+          return;
+        }
+
+        document.getElementById("bamId").textContent = assetId;
+
+        var url =
+          API_URL + "?id=" + encodeURIComponent(assetId);
+
+        fetchWithTimeout(url, REQUEST_TIMEOUT_MS)
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error("HTTP " + response.status);
+            }
+
+            return response.json();
+          })
+          .then(function (asset) {
+            if (!asset || typeof asset !== "object" || Array.isArray(asset)) {
+              throw new Error("No matching asset record returned.");
+            }
+
+            renderAsset(asset);
+          })
+          .catch(function (error) {
+            console.error("Asset portal request failed:", error);
+
+            if (error && error.name === "AbortError") {
+              renderFailure(
+                "The asset registry took too long to respond. Please refresh the page."
+              );
+            } else {
+              renderFailure(
+                "The asset record could not be loaded. Please refresh the page."
+              );
+            }
+          });
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", start);
+      } else {
+        start();
+      }
+    })();
   </script>
 </body>
 </html>
