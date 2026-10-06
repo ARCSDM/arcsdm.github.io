@@ -122,7 +122,9 @@
 
     .asset-image-wrap {
       display: none;
-      margin-top: 26px;
+      margin-top: 22px;
+      width: 100%;
+      height: clamp(210px, 34vh, 285px);
       border: 1px solid var(--line);
       border-radius: 14px;
       overflow: hidden;
@@ -130,15 +132,17 @@
     }
 
     .asset-image-wrap.visible {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .asset-image {
       display: block;
       width: 100%;
-      max-height: 360px;
-      height: auto;
+      height: 100%;
       object-fit: contain;
+      object-position: center;
       background: var(--soft);
     }
 
@@ -222,12 +226,8 @@
       background: var(--soft);
     }
 
-    .arc-brand-link {
-      background: #20262C;
-    }
-
     .arc-brand-link:hover {
-      background: #2B333A;
+      background: var(--soft);
     }
 
     .brand-logo {
@@ -272,10 +272,53 @@
     }
 
     @media (max-width:520px) {
-      body { padding: 14px 10px; }
-      .content { padding: 28px 22px 24px; }
-      .brand-logos { gap: 14px; }
-      .brand-link { padding-left: 6px; padding-right: 6px; }
+      body {
+        padding: 10px 8px;
+      }
+
+      .content {
+        padding: 24px 18px 22px;
+      }
+
+      .asset-image-wrap {
+        margin-top: 18px;
+        height: clamp(190px, 31vh, 240px);
+        border-radius: 12px;
+      }
+
+      .asset-links {
+        margin-top: 18px;
+      }
+
+      .brand-zone {
+        margin-top: 22px;
+        padding-top: 22px;
+      }
+
+      .brand-logos {
+        gap: 14px;
+      }
+
+      .brand-link {
+        min-height: 66px;
+        padding-left: 6px;
+        padding-right: 6px;
+      }
+
+      .solution-tagline {
+        margin-top: 20px;
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width:380px) {
+      .asset-image-wrap {
+        height: 200px;
+      }
+
+      .friendly-id {
+        font-size: 34px;
+      }
     }
   </style>
 </head>
@@ -290,7 +333,7 @@
       <div class="content">
         <p class="eyebrow">Asset Portal</p>
 
-        <h1 id="friendlyId" class="friendly-id">Loading Asset</h1>
+        <h1 id="friendlyId" class="friendly-id">Asset</h1>
         <p id="bamId" class="bam-id">Retrieving asset record…</p>
 
         <div class="organization">
@@ -361,12 +404,10 @@
     (function () {
       "use strict";
 
-      console.log("ARC Asset Portal v5 loaded");
+      console.log("ARC Asset Portal v7 loaded");
 
       var API_URL =
         "https://script.google.com/macros/s/AKfycbzpgb8SihK2Fo84NXWr6DqwXw7GNaXQhymVFqQlPol1S5DpcGKuKOh6vNyYR4z4l7lK/exec";
-
-      var REQUEST_TIMEOUT_MS = 12000;
 
       var ORGS = {
         LAUS: {
@@ -442,14 +483,7 @@
         }
       }
 
-      function setAssetImage(asset) {
-        var url = valueFrom(asset, [
-          "Image",
-          "Asset Image",
-          "Asset Photo",
-          "Primary Image"
-        ]);
-
+      function setAssetImageUrl(url) {
         var wrap = document.getElementById("assetImageWrap");
         var img = document.getElementById("assetImage");
 
@@ -470,7 +504,7 @@
         img.src = url;
       }
 
-      function renderAsset(asset) {
+      function renderMetadata(asset) {
         var friendlyId = valueFrom(asset, [
           "Friendly Asset ID",
           "Friendly ID",
@@ -510,14 +544,13 @@
           bamId || "BAM ID NOT AVAILABLE";
 
         setOrganization(asset);
-        setAssetImage(asset);
         setLink("matterportLink", matterport);
         setLink("skandLink", skand);
 
         document.getElementById("loadMessage").textContent = "";
       }
 
-      function renderFailure(message) {
+      function renderFinalFailure(message) {
         document.getElementById("friendlyId").textContent =
           "ASSET UNAVAILABLE";
 
@@ -528,13 +561,13 @@
 
         setLink("matterportLink", "");
         setLink("skandLink", "");
-        setAssetImage(null);
+        setAssetImageUrl("");
 
         document.getElementById("loadMessage").textContent =
           message || "The asset registry could not be reached.";
       }
 
-      function fetchWithTimeout(url, timeoutMs) {
+      function fetchJson(url, timeoutMs) {
         var controller = new AbortController();
         var timer = setTimeout(function () {
           controller.abort();
@@ -543,9 +576,70 @@
         return fetch(url, {
           cache: "no-store",
           signal: controller.signal
-        }).finally(function () {
-          clearTimeout(timer);
+        })
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error("HTTP " + response.status);
+            }
+            return response.json();
+          })
+          .finally(function () {
+            clearTimeout(timer);
+          });
+      }
+
+      function wait(ms) {
+        return new Promise(function (resolve) {
+          setTimeout(resolve, ms);
         });
+      }
+
+      function fetchWithRetry(url, options) {
+        var attempts = options.attempts || 3;
+        var timeoutMs = options.timeoutMs || 7000;
+        var delays = options.delays || [350, 800];
+
+        function attempt(number) {
+          return fetchJson(url, timeoutMs).catch(function (error) {
+            if (number >= attempts) {
+              throw error;
+            }
+
+            var delay =
+              delays[Math.min(number - 1, delays.length - 1)] || 500;
+
+            return wait(delay).then(function () {
+              return attempt(number + 1);
+            });
+          });
+        }
+
+        return attempt(1);
+      }
+
+      function loadImage(assetId) {
+        var imageUrl =
+          API_URL +
+          "?mode=image&id=" +
+          encodeURIComponent(assetId) +
+          "&_=" +
+          Date.now();
+
+        fetchWithRetry(imageUrl, {
+          attempts: 2,
+          timeoutMs: 15000,
+          delays: [600]
+        })
+          .then(function (result) {
+            var image = valueFrom(result, ["Image"]);
+            if (image) {
+              setAssetImageUrl(image);
+            }
+          })
+          .catch(function (error) {
+            // Image failure must never take down the asset portal.
+            console.warn("Asset image unavailable:", error);
+          });
       }
 
       function start() {
@@ -553,42 +647,43 @@
         var assetId = String(params.get("id") || "").trim();
 
         if (!assetId) {
-          renderFailure("No asset ID was supplied in the QR-code URL.");
+          renderFinalFailure("No asset ID was supplied in the QR-code URL.");
           return;
         }
 
+        // Show the scanned BAM ID immediately.
         document.getElementById("bamId").textContent = assetId;
 
-        var url =
-          API_URL + "?id=" + encodeURIComponent(assetId);
+        var metadataUrl =
+          API_URL +
+          "?mode=metadata&id=" +
+          encodeURIComponent(assetId) +
+          "&_=" +
+          Date.now();
 
-        fetchWithTimeout(url, REQUEST_TIMEOUT_MS)
-          .then(function (response) {
-            if (!response.ok) {
-              throw new Error("HTTP " + response.status);
-            }
-
-            return response.json();
-          })
+        fetchWithRetry(metadataUrl, {
+          attempts: 3,
+          timeoutMs: 7000,
+          delays: [300, 700]
+        })
           .then(function (asset) {
             if (!asset || typeof asset !== "object" || Array.isArray(asset)) {
               throw new Error("No matching asset record returned.");
             }
 
-            renderAsset(asset);
+            // Render useful asset information immediately.
+            renderMetadata(asset);
+
+            // Load photo independently so Drive thumbnail generation
+            // can never delay Friendly ID, links, or organization data.
+            loadImage(assetId);
           })
           .catch(function (error) {
-            console.error("Asset portal request failed:", error);
+            console.error("Asset metadata request failed:", error);
 
-            if (error && error.name === "AbortError") {
-              renderFailure(
-                "The asset registry took too long to respond. Please refresh the page."
-              );
-            } else {
-              renderFailure(
-                "The asset record could not be loaded. Please refresh the page."
-              );
-            }
+            renderFinalFailure(
+              "The asset record could not be retrieved after multiple attempts. Please try again."
+            );
           });
       }
 
