@@ -269,6 +269,19 @@
         animation: none !important;
       }
     }
+
+    .asset-photo {
+      display: none;
+      width: 112px;
+      height: 112px;
+      margin: 0 0 22px;
+      border-radius: 14px;
+      object-fit: cover;
+      background: var(--soft);
+      border: 1px solid var(--line);
+    }
+
+    .asset-photo.show { display: block; }
   </style>
 </head>
 <body>
@@ -277,6 +290,8 @@
       <div class="top-rule" aria-hidden="true"></div>
 
       <div class="card-inner">
+        <img id="assetPhoto" class="asset-photo" alt="Asset photo">
+
         <p class="eyebrow">Asset Portal</p>
 
         <h1 id="friendlyId" class="friendly-id">Loading</h1>
@@ -363,7 +378,7 @@
 
     function configureOrganization(asset) {
       const { rawOrganization, config } = organizationConfig(asset);
-      const orgName = rawOrganization || config?.name || "Organization";
+      const orgName = ORGS[rawOrganization]?.name || rawOrganization || "Organization";
       document.getElementById("organizationName").textContent = orgName;
 
       const orgLink = document.getElementById("orgLink");
@@ -412,6 +427,12 @@
 
       document.getElementById("friendlyId").textContent = friendlyId || "ASSET";
       document.getElementById("bamId").textContent = bamId || "BAM ID NOT AVAILABLE";
+
+      const photo = document.getElementById("assetPhoto");
+      if (asset.Image) {
+        photo.onload = () => photo.classList.add("show");
+        photo.src = asset.Image;
+      }
 
       configureOrganization(asset);
       configureAssetLink("matterportLink", matterport);
