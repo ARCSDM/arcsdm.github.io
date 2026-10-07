@@ -419,10 +419,24 @@
     (function () {
       "use strict";
 
-      console.log("ARC Asset Portal v9 loaded");
+      console.log("ARC Asset Portal v10 loaded");
 
       var API_URL =
         "https://script.google.com/macros/s/AKfycbzpgb8SihK2Fo84NXWr6DqwXw7GNaXQhymVFqQlPol1S5DpcGKuKOh6vNyYR4z4l7lK/exec";
+
+      /*
+       * v10 client-side instant-load cache.
+       *
+       * The API / workbook remain authoritative.
+       * Cached values are used only to make repeat QR scans render immediately,
+       * then the live API refreshes them in the background.
+       */
+      var CLIENT_CACHE_TTL_MS = 6 * 60 * 60 * 1000;       // 6 hours
+      var CLIENT_STALE_FALLBACK_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+      var META_CACHE_PREFIX = "arc_asset_portal_meta_v10_";
+      var IMAGE_CACHE_PREFIX = "arc_asset_portal_image_v10_";
+      var IMAGE_CACHE_INDEX_KEY = "arc_asset_portal_image_index_v10";
+      var MAX_LOCAL_IMAGE_ENTRIES = 10;
 
       var ORGS = {
         LAUS: {
@@ -622,6 +636,135 @@
           message || "The asset registry could not be reached.";
       }
 
+      function storageGet(key) {
+        try {
+          var raw = window.localStorage.getItem(key);
+          return raw ? JSON.parse(raw) : null;
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function storageSet(key, value) {
+        try {
+          window.localStorage.setItem(key, JSON.stringify(value));
+          return true;
+        } catch (error) {
+          return false;
+        }
+      }
+
+      function storageRemove(key) {
+        try {
+          window.localStorage.removeItem(key);
+        } catch (error) {}
+      }
+
+      function cacheKey(prefix, assetId) {
+        return prefix + String(assetId || "").toUpperCase();
+      }
+
+      function readClientCache(prefix, assetId) {
+        var entry = storageGet(cacheKey(prefix, assetId));
+
+        if (
+          !entry ||
+          !entry.savedAt ||
+          entry.data === undefined ||
+          entry.data === null
+        ) {
+          return null;
+        }
+
+        var age = Date.now() - Number(entry.savedAt);
+
+        return {
+          data: entry.data,
+          age: age,
+          fresh: age >= 0 && age <= CLIENT_CACHE_TTL_MS,
+          usableFallback:
+            age >= 0 && age <= CLIENT_STALE_FALLBACK_MS
+        };
+      }
+
+      function writeClientCache(prefix, assetId, data) {
+        if (data === undefined || data === null || data === "") {
+          return false;
+        }
+
+        return storageSet(
+          cacheKey(prefix, assetId),
+          {
+            savedAt: Date.now(),
+            data: data
+          }
+        );
+      }
+
+      function getImageCacheIndex() {
+        var index = storageGet(IMAGE_CACHE_INDEX_KEY);
+        return Array.isArray(index) ? index : [];
+      }
+
+      function saveImageCacheIndex(index) {
+        storageSet(
+          IMAGE_CACHE_INDEX_KEY,
+          index.slice(0, MAX_LOCAL_IMAGE_ENTRIES)
+        );
+      }
+
+      function touchImageCache(assetId) {
+        var id = String(assetId || "").toUpperCase();
+        var index = getImageCacheIndex().filter(function (item) {
+          return item !== id;
+        });
+
+        index.unshift(id);
+
+        while (index.length > MAX_LOCAL_IMAGE_ENTRIES) {
+          var removed = index.pop();
+          storageRemove(cacheKey(IMAGE_CACHE_PREFIX, removed));
+        }
+
+        saveImageCacheIndex(index);
+      }
+
+      function writeImageCache(assetId, image) {
+        if (!image) return false;
+
+        var key = cacheKey(IMAGE_CACHE_PREFIX, assetId);
+        var payload = {
+          savedAt: Date.now(),
+          data: image
+        };
+
+        if (storageSet(key, payload)) {
+          touchImageCache(assetId);
+          return true;
+        }
+
+        /*
+         * localStorage quota can vary by browser.
+         * If an image write fails, prune older image entries and retry once.
+         * Metadata cache entries are never removed by this cleanup.
+         */
+        var index = getImageCacheIndex();
+
+        while (index.length > 2) {
+          var removed = index.pop();
+          storageRemove(cacheKey(IMAGE_CACHE_PREFIX, removed));
+        }
+
+        saveImageCacheIndex(index);
+
+        if (storageSet(key, payload)) {
+          touchImageCache(assetId);
+          return true;
+        }
+
+        return false;
+      }
+
       function fetchJson(url, timeoutMs) {
         var controller = new AbortController();
         var timer = setTimeout(function () {
@@ -629,7 +772,15 @@
         }, timeoutMs);
 
         return fetch(url, {
-          cache: "no-store",
+          /*
+           * v9 used "no-store" plus a Date.now() query parameter, which forced
+           * every QR scan to make a completely unique network request.
+           *
+           * v10 uses stable URLs and normal browser caching. The API's
+           * server-side snapshots remain authoritative and the local cache
+           * performs an explicit background refresh.
+           */
+          cache: "default",
           signal: controller.signal
         })
           .then(function (response) {
@@ -672,28 +823,141 @@
         return attempt(1);
       }
 
-      function loadImage(assetId) {
-        var imageUrl =
+      function metadataUrl(assetId) {
+        return (
+          API_URL +
+          "?mode=metadata&id=" +
+          encodeURIComponent(assetId)
+        );
+      }
+
+      function imageUrl(assetId) {
+        return (
           API_URL +
           "?mode=image&id=" +
-          encodeURIComponent(assetId) +
-          "&_=" +
-          Date.now();
+          encodeURIComponent(assetId)
+        );
+      }
 
-        fetchWithRetry(imageUrl, {
+      function refreshImageFromApi(assetId, hadVisibleImage) {
+        return fetchWithRetry(imageUrl(assetId), {
           attempts: 2,
           timeoutMs: 15000,
           delays: [600]
         })
           .then(function (result) {
             var image = valueFrom(result, ["Image"]);
+
             if (image) {
+              writeImageCache(assetId, image);
               setAssetImageUrl(image);
+              return true;
             }
+
+            /*
+             * If a previously cached image is already visible, do not remove
+             * it merely because one refresh returned no image.
+             */
+            if (!hadVisibleImage) {
+              setAssetImageUrl("");
+            }
+
+            return false;
           })
           .catch(function (error) {
             // Image failure must never take down the asset portal.
             console.warn("Asset image unavailable:", error);
+            return false;
+          });
+      }
+
+      function loadImageInstant(assetId) {
+        var cached = readClientCache(
+          IMAGE_CACHE_PREFIX,
+          assetId
+        );
+
+        var renderedCachedImage = false;
+
+        if (cached && cached.fresh && cached.data) {
+          setAssetImageUrl(cached.data);
+          touchImageCache(assetId);
+          renderedCachedImage = true;
+        }
+
+        /*
+         * Image loading begins immediately and independently of metadata.
+         * This shortens total first-visit time while preserving the existing
+         * rule that Drive image work can never block asset information.
+         */
+        refreshImageFromApi(
+          assetId,
+          renderedCachedImage
+        ).then(function (loaded) {
+          if (
+            !loaded &&
+            !renderedCachedImage &&
+            cached &&
+            cached.usableFallback &&
+            cached.data
+          ) {
+            setAssetImageUrl(cached.data);
+          }
+        });
+      }
+
+      function refreshMetadataFromApi(assetId, cachedFallback) {
+        return fetchWithRetry(metadataUrl(assetId), {
+          attempts: 3,
+          timeoutMs: 7000,
+          delays: [300, 700]
+        })
+          .then(function (asset) {
+            if (
+              !asset ||
+              typeof asset !== "object" ||
+              Array.isArray(asset) ||
+              asset.error
+            ) {
+              throw new Error("No matching asset record returned.");
+            }
+
+            writeClientCache(
+              META_CACHE_PREFIX,
+              assetId,
+              asset
+            );
+
+            renderMetadata(asset);
+
+            return asset;
+          })
+          .catch(function (error) {
+            console.error("Asset metadata request failed:", error);
+
+            /*
+             * If a recently saved record exists, it is safer and more useful
+             * to show it than to replace the portal with an unavailable screen.
+             * The message makes the fallback state explicit.
+             */
+            if (
+              cachedFallback &&
+              cachedFallback.usableFallback &&
+              cachedFallback.data
+            ) {
+              renderMetadata(cachedFallback.data);
+
+              document.getElementById("loadMessage").textContent =
+                "Showing the most recently saved asset information. Live refresh is temporarily unavailable.";
+
+              return cachedFallback.data;
+            }
+
+            renderFinalFailure(
+              "The asset record could not be retrieved after multiple attempts. Please try again."
+            );
+
+            throw error;
           });
       }
 
@@ -709,37 +973,38 @@
         // Show the scanned BAM ID immediately.
         document.getElementById("bamId").textContent = assetId;
 
-        var metadataUrl =
-          API_URL +
-          "?mode=metadata&id=" +
-          encodeURIComponent(assetId) +
-          "&_=" +
-          Date.now();
+        var cachedMetadata = readClientCache(
+          META_CACHE_PREFIX,
+          assetId
+        );
 
-        fetchWithRetry(metadataUrl, {
-          attempts: 3,
-          timeoutMs: 7000,
-          delays: [300, 700]
-        })
-          .then(function (asset) {
-            if (!asset || typeof asset !== "object" || Array.isArray(asset)) {
-              throw new Error("No matching asset record returned.");
-            }
+        /*
+         * Repeat scans within the 6-hour client-cache window render the full
+         * known asset identity immediately, before any network round trip.
+         */
+        if (
+          cachedMetadata &&
+          cachedMetadata.fresh &&
+          cachedMetadata.data
+        ) {
+          renderMetadata(cachedMetadata.data);
+        }
 
-            // Render useful asset information immediately.
-            renderMetadata(asset);
+        /*
+         * Start the image path immediately instead of waiting for metadata.
+         * Metadata and image remain completely independent.
+         */
+        loadImageInstant(assetId);
 
-            // Load photo independently so Drive thumbnail generation
-            // can never delay Friendly ID, links, or organization data.
-            loadImage(assetId);
-          })
-          .catch(function (error) {
-            console.error("Asset metadata request failed:", error);
-
-            renderFinalFailure(
-              "The asset record could not be retrieved after multiple attempts. Please try again."
-            );
-          });
+        /*
+         * Always refresh the authoritative metadata in the background.
+         * Fresh cached content gives instant first paint; live API data wins
+         * as soon as it returns.
+         */
+        refreshMetadataFromApi(
+          assetId,
+          cachedMetadata
+        );
       }
 
       if (document.readyState === "loading") {
