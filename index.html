@@ -75,18 +75,28 @@
       text-transform: uppercase;
     }
 
-    .friendly-id {
+    .asset-type-title {
       margin: 0;
       color: var(--ink);
-      font-size: clamp(34px,8vw,48px);
-      line-height: 1;
+      font-size: clamp(30px,7vw,44px);
+      line-height: 1.04;
       font-weight: 800;
-      letter-spacing: -.035em;
+      letter-spacing: -.03em;
+      overflow-wrap: anywhere;
+    }
+
+    .friendly-id-subtitle {
+      margin: 9px 0 0;
+      color: var(--ink);
+      font-size: clamp(18px,4.5vw,23px);
+      line-height: 1.15;
+      font-weight: 750;
+      letter-spacing: -.01em;
       overflow-wrap: anywhere;
     }
 
     .bam-id {
-      margin: 10px 0 0;
+      margin: 7px 0 0;
       color: var(--muted);
       font-size: 14px;
       line-height: 1.35;
@@ -246,7 +256,7 @@
     .solution-tagline {
       margin: 26px 0 0;
       text-align: center;
-      color: var(--ink);
+      color: var(--arc-blue);
       font-size: 15px;
       line-height: 1.35;
       font-weight: 800;
@@ -316,8 +326,12 @@
         height: 200px;
       }
 
-      .friendly-id {
-        font-size: 34px;
+      .asset-type-title {
+        font-size: 30px;
+      }
+
+      .friendly-id-subtitle {
+        font-size: 18px;
       }
     }
   </style>
@@ -327,13 +341,14 @@
   <main class="portal-shell">
     <section class="portal-card" id="portalCard">
       <div class="top-rule" aria-hidden="true">
-        <span></span><span></span>
+        <span id="categoryAccent"></span><span></span>
       </div>
 
       <div class="content">
         <p class="eyebrow">Asset Portal</p>
 
-        <h1 id="friendlyId" class="friendly-id">Asset</h1>
+        <h1 id="assetType" class="asset-type-title">Loading Asset</h1>
+        <p id="friendlyId" class="friendly-id-subtitle"></p>
         <p id="bamId" class="bam-id">Retrieving asset record…</p>
 
         <div class="organization">
@@ -379,13 +394,13 @@
             >
               <img
                 class="brand-logo"
-                src="original_whiteletters.png"
+                src="originalPortrait_whiteletters.png"
                 alt="Architectural Resource Consultants"
               >
             </a>
           </div>
 
-          <p class="solution-tagline">INTEGRATED | OPERATION READY</p>
+          <p class="solution-tagline">INTEGRATED | OPERATION READY™</p>
 
           <div class="powered-by">
             <span>Powered by</span>
@@ -404,7 +419,7 @@
     (function () {
       "use strict";
 
-      console.log("ARC Asset Portal v7 loaded");
+      console.log("ARC Asset Portal v9 loaded");
 
       var API_URL =
         "https://script.google.com/macros/s/AKfycbzpgb8SihK2Fo84NXWr6DqwXw7GNaXQhymVFqQlPol1S5DpcGKuKOh6vNyYR4z4l7lK/exec";
@@ -421,6 +436,35 @@
           url: "https://www.braggcompanies.com/"
         }
       };
+
+      var CATEGORY_COLORS = {
+        "Electrical": "#d69414",
+        "Mechanical": "#2e7d5a",
+        "Plumbing": "#146edc",
+        "Fire / Life Safety": "#c41e3a",
+        "Fire - Life Safety": "#c41e3a",
+        "Fire/Life Safety": "#c41e3a",
+        "Specialty / Other": "#a82878",
+        "Specialty - Other": "#a82878"
+      };
+
+      function applyCategoryAccent(asset) {
+        var category = valueFrom(asset, [
+          "Asset Category",
+          "Category"
+        ]);
+
+        var accent = document.getElementById("categoryAccent");
+        if (!accent) return;
+
+        accent.style.backgroundColor =
+          CATEGORY_COLORS[category] || "#B41F78";
+
+        if (category) {
+          accent.setAttribute("title", "Asset Category: " + category);
+          accent.setAttribute("aria-label", "Asset Category: " + category);
+        }
+      }
 
       function valueFrom(record, names) {
         if (!record || !names) return "";
@@ -505,6 +549,11 @@
       }
 
       function renderMetadata(asset) {
+        var assetType = valueFrom(asset, [
+          "Asset Type",
+          "Type"
+        ]);
+
         var friendlyId = valueFrom(asset, [
           "Friendly Asset ID",
           "Friendly ID",
@@ -537,13 +586,17 @@
           "SKAND URL"
         ]);
 
+        document.getElementById("assetType").textContent =
+          assetType || "ASSET";
+
         document.getElementById("friendlyId").textContent =
-          friendlyId || "ASSET";
+          friendlyId || "";
 
         document.getElementById("bamId").textContent =
           bamId || "BAM ID NOT AVAILABLE";
 
         setOrganization(asset);
+        applyCategoryAccent(asset);
         setLink("matterportLink", matterport);
         setLink("skandLink", skand);
 
@@ -551,8 +604,10 @@
       }
 
       function renderFinalFailure(message) {
-        document.getElementById("friendlyId").textContent =
+        document.getElementById("assetType").textContent =
           "ASSET UNAVAILABLE";
+
+        document.getElementById("friendlyId").textContent = "";
 
         document.getElementById("bamId").textContent =
           "Unable to retrieve asset record";
