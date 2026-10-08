@@ -419,7 +419,7 @@
     (function () {
       "use strict";
 
-      console.log("ARC Asset Portal v10.1 loaded");
+      console.log("ARC Asset Portal v10.3 loaded");
 
       var API_URL =
         "https://script.google.com/macros/s/AKfycbzpgb8SihK2Fo84NXWr6DqwXw7GNaXQhymVFqQlPol1S5DpcGKuKOh6vNyYR4z4l7lK/exec";
@@ -432,7 +432,7 @@
        * then the live API refreshes them in the background.
        */
       var CLIENT_CACHE_TTL_MS = 6 * 60 * 60 * 1000;       // 6 hours
-      var CLIENT_STALE_FALLBACK_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+      var CLIENT_STALE_FALLBACK_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
       var META_CACHE_PREFIX = "arc_asset_portal_meta_v10_";
       var IMAGE_CACHE_PREFIX = "arc_asset_portal_image_v10_";
       var IMAGE_CACHE_INDEX_KEY = "arc_asset_portal_image_index_v10";
@@ -776,11 +776,12 @@
            * v9 used "no-store" plus a Date.now() query parameter, which forced
            * every QR scan to make a completely unique network request.
            *
-           * v10 uses stable URLs and normal browser caching. The API's
-           * server-side snapshots remain authoritative and the local cache
-           * performs an explicit background refresh.
+           * v10.3 uses localStorage for instant repeat rendering, while live
+           * Apps Script requests use no-store so redirects/errors are never
+           * accidentally reused by the browser. The API snapshots remain
+           * authoritative.
            */
-          cache: "default",
+          cache: "no-store",
           signal: controller.signal
         })
           .then(function (response) {
@@ -827,7 +828,9 @@
         return (
           API_URL +
           "?mode=metadata&id=" +
-          encodeURIComponent(assetId)
+          encodeURIComponent(assetId) +
+          "&_live=" +
+          Date.now()
         );
       }
 
@@ -835,15 +838,17 @@
         return (
           API_URL +
           "?mode=image&id=" +
-          encodeURIComponent(assetId)
+          encodeURIComponent(assetId) +
+          "&_live=" +
+          Date.now()
         );
       }
 
       function refreshImageFromApi(assetId, hadVisibleImage) {
         return fetchWithRetry(imageUrl(assetId), {
-          attempts: 2,
-          timeoutMs: 15000,
-          delays: [600]
+          attempts: 3,
+          timeoutMs: 25000,
+          delays: [800, 1800]
         })
           .then(function (result) {
             var image = valueFrom(result, ["Image"]);
@@ -908,9 +913,9 @@
 
       function refreshMetadataFromApi(assetId, cachedFallback) {
         return fetchWithRetry(metadataUrl(assetId), {
-          attempts: 3,
-          timeoutMs: 7000,
-          delays: [300, 700]
+          attempts: 4,
+          timeoutMs: 20000,
+          delays: [750, 1500, 3000]
         })
           .then(function (asset) {
             if (
@@ -972,6 +977,9 @@
 
         // Show the scanned BAM ID immediately.
         document.getElementById("bamId").textContent = assetId;
+
+        document.getElementById("loadMessage").textContent =
+          "Connecting to asset registry…";
 
         var cachedMetadata = readClientCache(
           META_CACHE_PREFIX,
